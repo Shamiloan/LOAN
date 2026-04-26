@@ -3,807 +3,511 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="AXEPEAK — Timeless apparel for life's journey. Overcome obstacles, make a difference with every step. Shop shirts, urban sweatshirts and more.">
-  <meta name="theme-color" content="#0A0F0D">
-  <title>AXEPEAK | Timeless Journey — Every Step Makes a Difference</title>
-  <!-- Preconnect & Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <title>AXEPEAK | SALE — Reach Your Peak</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      transition: all 0.2s ease;
     }
-
+    :root {
+      --bg: #0F1724;
+      --card: rgba(30, 35, 50, 0.7);
+      --text: #F0E6D0;
+      --gold: #FFC86E;
+      --sale: #FF6B6B;
+    }
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #0A0C0A;
-      color: #ECE6DC;
-      line-height: 1.5;
-      scroll-behavior: smooth;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0F1724 0%, #1A1F2E 100%);
+      color: var(--text);
     }
-
-    /* custom cursor (subtle) */
-    ::selection {
-      background: #C69C6D;
-      color: #0A0C0A;
+    .wrapper { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 20px;
+      flex-wrap: wrap;
+      gap: 20px;
+      background: rgba(10, 14, 23, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      margin-bottom: 20px;
     }
-
-    /* custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 7px;
+    .logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--gold);
     }
-    ::-webkit-scrollbar-track {
-      background: #181E1A;
+    .cart-btn {
+      background: var(--gold);
+      color: #0D1117;
+      border: none;
+      border-radius: 40px;
+      padding: 8px 20px;
+      font-weight: bold;
+      cursor: pointer;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #C69C6D;
-      border-radius: 12px;
+    .cart-count {
+      background: #0D1117;
+      color: var(--gold);
+      border-radius: 50%;
+      padding: 2px 8px;
+      margin-left: 8px;
     }
-
-    /* container */
-    .container {
-      max-width: 1360px;
-      margin: 0 auto;
-      padding: 0 32px;
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
     }
-
-    /* animation fade-up */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(36px);
-      transition: opacity 0.85s cubic-bezier(0.2, 0.9, 0.3, 1.1), transform 0.85s ease;
+    .brand-name {
+      font-size: 72px;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 4px 4px 0 #583A10;
+      margin-bottom: 30px;
     }
-    .fade-up.appear {
-      opacity: 1;
-      transform: translateY(0);
+    .quote-line {
+      font-size: 24px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin: 5px 0;
     }
-
-    /* header */
-    .site-header {
+    .peak-message {
+      margin-top: 30px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-shadow: 0 0 15px rgba(255, 200, 110, 0.5);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 25px rgba(255, 200, 110, 0.8); }
+    }
+    .shop-btn {
+      display: inline-block;
+      margin-top: 30px;
+      background: var(--gold);
+      color: #0D1117;
+      padding: 14px 40px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .timeless-ribbon {
+      background: rgba(255, 200, 110, 0.1);
+      padding: 20px;
+      text-align: center;
+      margin: 30px 0;
+    }
+    .timeless-ribbon h2 {
+      font-size: 36px;
+      letter-spacing: 8px;
+    }
+    .category-filters {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+    .filter-btn {
+      background: rgba(255, 200, 110, 0.1);
+      border: 1px solid var(--gold);
+      border-radius: 40px;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--gold);
+      color: #0D1117;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
+    .product-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 200, 110, 0.2);
+      position: relative;
+      transition: 0.3s;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold);
+    }
+    .sale-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--sale);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .product-img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      background: #2A3642;
+    }
+    .product-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 10px 0;
+    }
+    .price-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 10px 0;
+    }
+    .original-price {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+    .product-price {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--sale);
+    }
+    .add-to-cart {
+      background: none;
+      border: none;
+      border-bottom: 2px solid var(--gold);
+      color: var(--text);
+      padding: 8px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .modal {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
       z-index: 1000;
-      padding: 22px 0;
-      transition: all 0.3s ease;
-      background: transparent;
-    }
-    .site-header.scrolled {
-      background: rgba(10, 12, 10, 0.85);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(198, 156, 109, 0.25);
-      padding: 14px 0;
-    }
-    .header-inner {
-      display: flex;
+      justify-content: center;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 24px;
     }
-    .logo {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(130deg, #F3E8DA 0%, #C69C6D 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      text-decoration: none;
+    .modal.active { display: flex; }
+    .modal-content {
+      background: #1E2332;
+      border-radius: 28px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      border: 1px solid var(--gold);
     }
-    .nav-links {
+    .payment-options {
       display: flex;
-      gap: 2rem;
-      align-items: center;
+      gap: 15px;
+      justify-content: center;
+      margin: 20px 0;
       flex-wrap: wrap;
     }
-    .nav-links a {
-      text-decoration: none;
-      font-weight: 500;
-      color: #E6DFD1;
-      font-size: 0.95rem;
-      transition: 0.2s;
-      letter-spacing: 0.3px;
-    }
-    .nav-links a:hover {
-      color: #C69C6D;
-    }
-    .follow-cta {
-      background: rgba(198, 156, 109, 0.12);
-      padding: 8px 22px;
+    .pay-btn {
+      padding: 12px 24px;
       border-radius: 40px;
-      border: 1px solid rgba(198, 156, 109, 0.5);
-      font-weight: 600;
-    }
-    .follow-cta:hover {
-      background: #C69C6D;
-      color: #0A0C0A !important;
-    }
-
-    /* SEARCH BAR - modern & integrated */
-    .search-wrapper {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-    }
-    .search-input {
-      background: rgba(24, 30, 26, 0.8);
-      border: 1px solid rgba(198, 156, 109, 0.4);
-      border-radius: 60px;
-      padding: 8px 18px 8px 44px;
-      font-size: 0.85rem;
-      color: #ECE6DC;
-      font-family: 'Inter', sans-serif;
-      width: 200px;
-      transition: all 0.3s;
-      outline: none;
-      backdrop-filter: blur(4px);
-    }
-    .search-input:focus {
-      width: 260px;
-      border-color: #C69C6D;
-      background: #1A201C;
-      box-shadow: 0 0 0 2px rgba(198,156,109,0.2);
-    }
-    .search-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #C69C6D;
-      font-size: 0.9rem;
-      pointer-events: none;
-    }
-    .search-clear {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #9AAE9F;
-      cursor: pointer;
-      font-size: 0.8rem;
-      display: none;
-      transition: 0.2s;
-    }
-    .search-clear:hover {
-      color: #C69C6D;
-    }
-    .search-results-panel {
-      position: absolute;
-      top: 52px;
-      right: 0;
-      background: #121814;
-      backdrop-filter: blur(16px);
-      border-radius: 24px;
-      width: 320px;
-      max-height: 380px;
-      overflow-y: auto;
-      z-index: 1200;
-      border: 1px solid rgba(198,156,109,0.3);
-      box-shadow: 0 20px 35px -12px black;
-      display: none;
-      flex-direction: column;
-      padding: 12px 0;
-    }
-    .search-results-panel.active {
-      display: flex;
-    }
-    .result-item {
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: 0.15s;
-      border-bottom: 1px solid rgba(198,156,109,0.1);
-    }
-    .result-item:hover {
-      background: rgba(198,156,109,0.15);
-    }
-    .result-icon {
-      font-size: 1.5rem;
-      width: 36px;
-      text-align: center;
-    }
-    .result-info h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-    .result-info p {
-      font-size: 0.75rem;
-      color: #C69C6D;
-    }
-    .no-results {
-      padding: 18px;
-      text-align: center;
-      color: #9AAE9F;
-      font-size: 0.85rem;
-    }
-
-    /* hero section */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      background: radial-gradient(ellipse at 70% 30%, #1A231E, #040605);
-      overflow: hidden;
-    }
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" opacity="0.05"><path fill="none" stroke="%23C69C6D" stroke-width="1.2" d="M100,200 L1100,200 M100,400 L1100,400 M100,600 L1100,600 M300,100 L300,700 M600,100 L600,700 M900,100 L900,700"/><circle cx="600" cy="400" r="180" fill="none" stroke="%23C69C6D" stroke-width="1"/></svg>');
-      background-repeat: repeat;
-      pointer-events: none;
-    }
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 1000px;
-      margin: 0 auto;
-      text-align: center;
-      padding: 120px 24px 80px;
-    }
-    .hero-quote {
-      font-size: 3.5rem;
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #FFFFFF 15%, #DDB587 85%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      margin-bottom: 28px;
-    }
-    .hero-sub {
-      font-size: 1.1rem;
-      color: #CBBFA8;
-      max-width: 580px;
-      margin: 0 auto 36px;
-      font-weight: 400;
-    }
-    .btn-shop {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: #C69C6D;
-      color: #0A0C0A;
-      padding: 14px 38px;
-      border-radius: 60px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.25s;
-      font-size: 1rem;
-      box-shadow: 0 12px 24px -10px rgba(198,156,109,0.4);
-    }
-    .btn-shop:hover {
-      background: #E2B384;
-      gap: 18px;
-      transform: translateY(-2px);
-    }
-
-    /* timeless band */
-    .timeless-band {
-      background: #111713;
-      padding: 32px 0;
-      text-align: center;
-      border-top: 1px solid rgba(198,156,109,0.2);
-      border-bottom: 1px solid rgba(198,156,109,0.2);
-    }
-    .timeless-band h2 {
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: 10px;
-      text-transform: uppercase;
-      word-break: keep-all;
-    }
-
-    /* products section */
-    .products {
-      padding: 100px 0;
-      background: #0A0C0A;
-    }
-    .section-head {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-    .section-head h3 {
-      font-size: 2.6rem;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-    }
-    .section-head span {
-      display: inline-block;
-      width: 70px;
-      height: 3px;
-      background: #C69C6D;
-      margin-top: 18px;
-    }
-    .product-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 45px;
-      justify-content: center;
-    }
-    .product-item {
-      background: #121714;
-      border-radius: 36px;
-      overflow: hidden;
-      width: 310px;
-      transition: all 0.35s ease;
-      border: 1px solid rgba(198,156,109,0.2);
-    }
-    .product-item:hover {
-      transform: translateY(-12px);
-      border-color: #C69C6D;
-      box-shadow: 0 28px 38px -16px rgba(0,0,0,0.6);
-    }
-    .product-img {
-      height: 320px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0F1411;
-      font-size: 5rem;
-      color: #C69C6D;
-    }
-    .product-details {
-      padding: 26px 20px 32px;
-      text-align: center;
-    }
-    .product-details h4 {
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .price {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #C69C6D;
-      margin: 12px 0;
-    }
-    .product-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: #E9E0D2;
-      text-decoration: none;
-      font-weight: 500;
-      border-bottom: 1px solid #C69C6D;
-      padding-bottom: 4px;
-      transition: 0.2s;
-    }
-    .product-link:hover {
-      gap: 12px;
-      color: #C69C6D;
-    }
-
-    /* mantra */
-    .mantra {
-      background: linear-gradient(95deg, #0E1511 0%, #171F1A 100%);
-      padding: 75px 20px;
-      text-align: center;
-      border-block: 1px solid #2A342D;
-    }
-    .mantra p {
-      font-size: 1.5rem;
-      max-width: 800px;
-      margin: 0 auto;
-      font-style: italic;
-      font-weight: 400;
-      color: #DED3C0;
-    }
-
-    /* subscribe */
-    .subscribe-area {
-      padding: 100px 24px;
-      background: radial-gradient(circle at 20% 50%, #1C2821, #040605);
-    }
-    .subscribe-card {
-      max-width: 640px;
-      margin: 0 auto;
-      background: rgba(18, 24, 20, 0.7);
-      backdrop-filter: blur(14px);
-      border-radius: 48px;
-      padding: 56px 44px;
-      border: 1px solid rgba(198,156,109,0.5);
-      text-align: center;
-    }
-    .subscribe-card h3 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-    .subscribe-card p {
-      color: #CBBFA8;
-      margin-bottom: 32px;
-    }
-    .form-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
-    .form-group input {
-      flex: 1;
-      padding: 16px 24px;
-      border-radius: 60px;
       border: none;
-      background: #1C2621;
-      color: #F0E7DB;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      outline: none;
-      transition: 0.2s;
-    }
-    .form-group input:focus {
-      background: #2A3730;
-      box-shadow: 0 0 0 2px #C69C6D;
-    }
-    .form-group button {
-      background: #C69C6D;
-      border: none;
-      padding: 16px 36px;
-      border-radius: 60px;
-      font-weight: 700;
-      color: #0A0C0A;
+      font-weight: bold;
       cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: 0.2s;
     }
-    .form-group button:hover {
-      background: #E2B384;
-      transform: scale(1.02);
+    .pay-card { background: #2A3642; color: white; border: 1px solid var(--gold); }
+    .pay-apple { background: black; color: white; }
+    .pay-paypal { background: #0070BA; color: white; }
+    .close-modal {
+      background: none;
+      border: 1px solid var(--gold);
+      color: var(--text);
+      padding: 10px 20px;
+      border-radius: 40px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
     }
-
-    /* footer */
     .footer {
-      background: #050706;
-      padding: 60px 0 30px;
-      border-top: 1px solid #202A23;
-    }
-    .footer-inner {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 40px;
-      margin-bottom: 48px;
-    }
-    .footer-col p {
-      color: #9AAE9F;
-      max-width: 280px;
-      margin-top: 12px;
-    }
-    .footer-col h4 {
-      margin-bottom: 18px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    .social-icons a {
-      color: #C69C6D;
-      font-size: 1.5rem;
-      margin-right: 20px;
-      transition: 0.2s;
-    }
-    .social-icons a:hover {
-      color: #E9E0D2;
-    }
-    .copyright {
       text-align: center;
-      color: #738177;
-      font-size: 0.8rem;
-      padding-top: 24px;
-      border-top: 1px solid #1C2621;
+      padding: 40px;
+      color: #aaa;
     }
-
-    @media (max-width: 860px) {
-      .hero-quote { font-size: 2.2rem; }
-      .timeless-band h2 { font-size: 1.4rem; letter-spacing: 5px; }
-      .container { padding: 0 20px; }
-      .product-item { width: 270px; }
-      .subscribe-card { padding: 36px 24px; }
-      .section-head h3 { font-size: 2rem; }
-      .nav-links { gap: 1rem; }
-      .search-input { width: 150px; }
-      .search-input:focus { width: 200px; }
-      .search-results-panel { width: 280px; right: -20px; }
+    .footer .peak {
+      font-size: 16px;
+      letter-spacing: 3px;
+      margin-top: 15px;
+      color: var(--gold);
+    }
+    @media (max-width: 700px) {
+      .brand-name { font-size: 44px; }
+      .quote-line { font-size: 18px; }
+      .peak-message { font-size: 20px; }
     }
   </style>
 </head>
 <body>
-
-<header class="site-header" id="mainHeader">
-  <div class="container header-inner">
-    <a href="#" class="logo">AXEPEAK</a>
-    <div class="nav-links">
-      <!-- SEARCH BAR integrated in nav -->
-      <div class="search-wrapper">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" id="globalSearchInput" class="search-input" placeholder="Search products...">
-        <span id="searchClearBtn" class="search-clear"><i class="fas fa-times-circle"></i></span>
-        <div id="searchResultsPanel" class="search-results-panel"></div>
-      </div>
-      <a href="#collection">SHOP</a>
-      <a href="#subscribe-now">SUBSCRIBE</a>
-      <a href="#" class="follow-cta"><i class="fab fa-instagram"></i> FOLLOW US</a>
-    </div>
-  </div>
-</header>
-
-<main>
-  <!-- Hero section with original quote -->
-  <section class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <div class="hero-quote fade-up">
-        LIFE'S JOURNEY IS FILLED<br>
-        WITH OBSTACLES,<br>
-        BUT WITH EVERY STEP YOU<br>
-        TAKE, YOU'RE MAKING A<br>
-        DIFFERENCE.
-      </div>
-      <div class="hero-sub fade-up">
-        Engineered for the relentless. Each garment carries the spirit of perseverance.
-      </div>
-      <div class="fade-up">
-        <a href="#collection" class="btn-shop">SHOP NOW <i class="fas fa-arrow-right"></i></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- TIMELESS banner -->
-  <div class="timeless-band">
-    <div class="container">
-      <h2>TIMELESS</h2>
-    </div>
+<div class="wrapper">
+  <div class="top-bar">
+    <div class="logo-text">AXEPEAK</div>
+    <div><button id="cartButton" class="cart-btn">🛒 Cart <span id="cartCount" class="cart-count">0</span></button></div>
   </div>
 
-  <!-- PRODUCTS section (Shirts, Urban Sweat Shirt, Summit Jacket) -->
-  <section class="products" id="collection">
-    <div class="container">
-      <div class="section-head fade-up">
-        <h3>Latest Essentials</h3>
-        <span></span>
-      </div>
-      <div class="product-grid" id="productGridContainer">
-        <!-- Shirts - $20.00 -->
-        <div class="product-item fade-up" data-product-name="Shirts" data-product-price="20.00" data-product-category="shirt">
-          <div class="product-img">
-            <i class="fas fa-vest"></i>
-          </div>
-          <div class="product-details">
-            <h4>Shirts</h4>
-            <div class="price">$20.00</div>
-            <a href="#" class="product-link">Shop now <i class="fas fa-long-arrow-alt-right"></i></a>
-          </div>
-        </div>
-        <!-- Urban Sweat Shirt - $30.00 -->
-        <div class="product-item fade-up" data-product-name="Urban Sweat Shirt" data-product-price="30.00" data-product-category="sweatshirt">
-          <div class="product-img">
-            <i class="fas fa-hoodie"></i>
-          </div>
-          <div class="product-details">
-            <h4>Urban Sweat Shirt</h4>
-            <div class="price">$30.00</div>
-            <a href="#" class="product-link">Shop now <i class="fas fa-long-arrow-alt-right"></i></a>
-          </div>
-        </div>
-        <!-- Summit Field Jacket -->
-        <div class="product-item fade-up" data-product-name="Summit Field Jacket" data-product-price="89.00" data-product-category="jacket">
-          <div class="product-img">
-            <i class="fas fa-mountain-sun"></i>
-          </div>
-          <div class="product-details">
-            <h4>Summit Field Jacket</h4>
-            <div class="price">$89.00</div>
-            <a href="#" class="product-link">Explore <i class="fas fa-long-arrow-alt-right"></i></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div class="hero">
+    <div class="brand-name">AXEPEAK</div>
+    <div class="quote-line">LIFE'S JOURNEY IS FILLED WITH OBSTACLES</div>
+    <div class="quote-line">BUT WITH EVERY STEP YOU TAKE</div>
+    <div class="quote-line">YOU'RE MAKING A DIFFERENCE.</div>
+    <div class="peak-message">✦ REACH YOUR PEAK ✦</div>
+    <a href="#shop" class="shop-btn">SHOP SALE</a>
+  </div>
 
-  <!-- mantra block -->
-  <div class="mantra">
-    <div class="container">
-      <p class="fade-up">“Every obstacle refines the path. Wear your story. Make each step count.”</p>
+  <div class="timeless-ribbon">
+    <h2>TIMELESS SALE</h2>
+  </div>
+
+  <div class="category-filters" id="categoryFilters">
+    <button class="filter-btn active" data-cat="all">ALL</button>
+    <button class="filter-btn" data-cat="t-shirt">👕 T-SHIRTS</button>
+    <button class="filter-btn" data-cat="sweatpant">🩳 SWEATPANTS</button>
+    <button class="filter-btn" data-cat="hoodie">🧥 HOODIES</button>
+    <button class="filter-btn" data-cat="shirt">👔 SHIRTS</button>
+    <button class="filter-btn" data-cat="polo">🧶 POLOS</button>
+    <button class="filter-btn" data-cat="pants">👖 PANTS</button>
+  </div>
+
+  <div class="products-grid" id="productGrid">
+    <!-- T-SHIRTS - Real T-Shirt Images -->
+    <div class="product-card" data-cat="t-shirt">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Classic T-Shirt">
+      <div class="product-title">classic t-shirt</div>
+      <div class="price-container"><span class="original-price">$20</span><span class="product-price">$14</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <div class="product-card" data-cat="t-shirt">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Premium T-Shirt">
+      <div class="product-title">premium t-shirt</div>
+      <div class="price-container"><span class="original-price">$25</span><span class="product-price">$17.50</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <!-- SWEATPANTS - Real Sweatpant Images -->
+    <div class="product-card" data-cat="sweatpant">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Classic Sweatpant">
+      <div class="product-title">classic sweatpant</div>
+      <div class="price-container"><span class="original-price">$25</span><span class="product-price">$17.50</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <div class="product-card" data-cat="sweatpant">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/7679602/pexels-photo-7679602.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Cargo Sweatpant">
+      <div class="product-title">cargo sweatpant</div>
+      <div class="price-container"><span class="original-price">$32</span><span class="product-price">$22.40</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <!-- HOODIES - Real Hoodie Images (NOT flowers) -->
+    <div class="product-card" data-cat="hoodie">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/9963422/pexels-photo-9963422.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Classic Hoodie">
+      <div class="product-title">classic hoodie</div>
+      <div class="price-container"><span class="original-price">$30</span><span class="product-price">$21</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <div class="product-card" data-cat="hoodie">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/1578212/pexels-photo-1578212.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Zip Hoodie">
+      <div class="product-title">zip hoodie</div>
+      <div class="price-container"><span class="original-price">$35</span><span class="product-price">$24.50</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <!-- SHIRTS - Real Shirt Images -->
+    <div class="product-card" data-cat="shirt">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Casual Shirt">
+      <div class="product-title">casual shirt</div>
+      <div class="price-container"><span class="original-price">$20</span><span class="product-price">$14</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <div class="product-card" data-cat="shirt">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/45982/pexels-photo-45982.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Oxford Shirt">
+      <div class="product-title">oxford shirt</div>
+      <div class="price-container"><span class="original-price">$35</span><span class="product-price">$24.50</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <!-- POLOS - Real Polo Images -->
+    <div class="product-card" data-cat="polo">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/4545206/pexels-photo-4545206.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Classic Polo">
+      <div class="product-title">classic polo</div>
+      <div class="price-container"><span class="original-price">$20</span><span class="product-price">$14</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <div class="product-card" data-cat="polo">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/3651220/pexels-photo-3651220.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Premium Polo">
+      <div class="product-title">premium polo</div>
+      <div class="price-container"><span class="original-price">$30</span><span class="product-price">$21</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <!-- PANTS - Real Pant Images -->
+    <div class="product-card" data-cat="pants">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Jeans">
+      <div class="product-title">jeans</div>
+      <div class="price-container"><span class="original-price">$45</span><span class="product-price">$31.50</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <div class="product-card" data-cat="pants">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/7679602/pexels-photo-7679602.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Cargo Pants">
+      <div class="product-title">cargo pants</div>
+      <div class="price-container"><span class="original-price">$45</span><span class="product-price">$31.50</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
+    </div>
+    <div class="product-card" data-cat="pants">
+      <div class="sale-badge">-30%</div>
+      <img class="product-img" src="https://images.pexels.com/photos/7679602/pexels-photo-7679602.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" alt="Chino Pants">
+      <div class="product-title">chino pants</div>
+      <div class="price-container"><span class="original-price">$40</span><span class="product-price">$28</span></div>
+      <button class="add-to-cart">ADD TO CART →</button>
     </div>
   </div>
 
-  <!-- subscribe section -->
-  <div class="subscribe-area" id="subscribe-now">
-    <div class="subscribe-card fade-up">
-      <h3><i class="fas fa-paper-plane"></i> SUBSCRIBE</h3>
-      <p>Join the AXEPEAK journey — receive timeless drops, exclusive access & purpose-driven stories.</p>
-      <form id="subscriptionRootForm" class="form-group">
-        <input type="email" id="subsEmail" placeholder="your@email.com" required>
-        <button type="submit">Subscribe →</button>
-      </form>
-      <p style="font-size: 0.7rem; margin-top: 24px; opacity: 0.7;">✦ No spam, only the essence of adventure ✦</p>
+  <div id="cartModal" class="modal">
+    <div class="modal-content">
+      <h2>Your Cart</h2>
+      <div id="cartItems"></div>
+      <div id="cartTotal" style="font-size: 24px; margin: 20px 0;">Total: $0</div>
+      <div class="payment-options">
+        <button id="payCard" class="pay-btn pay-card">💳 Credit Card</button>
+        <button id="payApple" class="pay-btn pay-apple">🍎 Apple Pay</button>
+        <button id="payPaypal" class="pay-btn pay-paypal">💰 PayPal</button>
+      </div>
+      <button class="close-modal">Close</button>
     </div>
   </div>
-</main>
 
-<footer class="footer">
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-col">
-        <h3 style="font-size: 1.7rem; font-weight: 700;">AXEPEAK</h3>
-        <p>Timeless apparel built for those who turn obstacles into milestones.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Navigate</h4>
-        <p><a href="#collection" style="color:#CBBFA8; text-decoration: none;">Collection</a></p>
-        <p><a href="#" style="color:#CBBFA8; text-decoration: none;">Our story</a></p>
-        <p><a href="#" style="color:#CBBFA8; text-decoration: none;">Sustainability</a></p>
-      </div>
-      <div class="footer-col">
-        <h4>Connect</h4>
-        <div class="social-icons">
-          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-        </div>
-        <p style="margin-top: 20px;">hello@axpeak.com</p>
-      </div>
-    </div>
-    <div class="copyright">
-      © 2025 AXEPEAK — Life's journey is filled with obstacles, but every step makes a difference. <br>
-      FOLLOW US to get the latest product recommendations!
-    </div>
+  <div class="footer">
+    <p>✦ FOLLOW US to get the latest product recommendations! ✦</p>
+    <p>© 2025 AXEPEAK — Every step makes a difference.</p>
+    <div class="peak">✦ REACH YOUR PEAK ✦</div>
   </div>
-</footer>
+</div>
 
 <script>
-  (function() {
-    // header scroll effect
-    const header = document.getElementById('mainHeader');
-    if (header) {
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 40) header.classList.add('scrolled');
-        else header.classList.remove('scrolled');
-      });
-    }
+  let cart = [];
+  let currentFilter = 'all';
 
-    // Intersection Observer for fade-up animations
-    const fadeItems = document.querySelectorAll('.fade-up');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('appear');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -20px 0px" });
-    fadeItems.forEach(el => observer.observe(el));
-    setTimeout(() => {
-      fadeItems.forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 70) el.classList.add('appear');
-      });
-    }, 150);
+  function saveCart() {
+    localStorage.setItem('axpeak_cart', JSON.stringify(cart));
+    updateCartUI();
+  }
 
-    // ---------- SEARCH BAR FUNCTIONALITY ----------
-    const productsData = [
-      { name: "Shirts", price: "$20.00", icon: "fa-vest", category: "shirt", element: document.querySelector('.product-item[data-product-name="Shirts"]') },
-      { name: "Urban Sweat Shirt", price: "$30.00", icon: "fa-hoodie", category: "sweatshirt", element: document.querySelector('.product-item[data-product-name="Urban Sweat Shirt"]') },
-      { name: "Summit Field Jacket", price: "$89.00", icon: "fa-mountain-sun", category: "jacket", element: document.querySelector('.product-item[data-product-name="Summit Field Jacket"]') }
-    ];
-
-    const searchInput = document.getElementById('globalSearchInput');
-    const searchPanel = document.getElementById('searchResultsPanel');
-    const clearBtn = document.getElementById('searchClearBtn');
-
-    function renderSearchResults(query) {
-      const lowerQuery = query.toLowerCase().trim();
-      if (!lowerQuery) {
-        searchPanel.classList.remove('active');
+  function updateCartUI() {
+    const cartCount = document.getElementById('cartCount');
+    const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+    if (cartCount) cartCount.innerText = totalItems;
+    
+    const cartItemsDiv = document.getElementById('cartItems');
+    const cartTotalSpan = document.getElementById('cartTotal');
+    if (cartItemsDiv) {
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
+        cartTotalSpan.innerText = 'Total: $0';
         return;
       }
-      const filtered = productsData.filter(p => p.name.toLowerCase().includes(lowerQuery) || p.category.includes(lowerQuery));
-      searchPanel.innerHTML = '';
-      if (filtered.length === 0) {
-        const noRes = document.createElement('div');
-        noRes.className = 'no-results';
-        noRes.innerHTML = '<i class="fas fa-compass"></i> No matching gear found';
-        searchPanel.appendChild(noRes);
-      } else {
-        filtered.forEach(prod => {
-          const resultDiv = document.createElement('div');
-          resultDiv.className = 'result-item';
-          resultDiv.innerHTML = `
-            <div class="result-icon"><i class="fas ${prod.icon}"></i></div>
-            <div class="result-info">
-              <h4>${prod.name}</h4>
-              <p>${prod.price}</p>
-            </div>
-          `;
-          resultDiv.addEventListener('click', (e) => {
-            if (prod.element) {
-              prod.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              // temporary highlight effect
-              prod.element.style.transition = '0.2s';
-              prod.element.style.borderColor = '#C69C6D';
-              prod.element.style.boxShadow = '0 0 0 2px rgba(198,156,109,0.6)';
-              setTimeout(() => {
-                prod.element.style.borderColor = '';
-                prod.element.style.boxShadow = '';
-              }, 1500);
-            }
-            searchPanel.classList.remove('active');
-            searchInput.value = '';
-            clearBtn.style.display = 'none';
-          });
-          searchPanel.appendChild(resultDiv);
+      let total = 0;
+      cartItemsDiv.innerHTML = '';
+      cart.forEach((item, idx) => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        cartItemsDiv.innerHTML += `<div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #aaa;">
+          <div><strong>${item.name}</strong><br>$${item.price} x ${item.qty}</div>
+          <div>$${itemTotal.toFixed(2)} <button class="remove-item" data-idx="${idx}" style="background: none; border: none; color: red; cursor: pointer;">🗑️</button></div>
+        </div>`;
+      });
+      cartTotalSpan.innerText = `Total: $${total.toFixed(2)}`;
+      document.querySelectorAll('.remove-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(btn.dataset.idx);
+          cart.splice(idx, 1);
+          saveCart();
+          updateCartUI();
         });
-      }
-      searchPanel.classList.add('active');
-    }
-
-    searchInput.addEventListener('input', (e) => {
-      const val = e.target.value;
-      if (val.length > 0) {
-        clearBtn.style.display = 'flex';
-      } else {
-        clearBtn.style.display = 'none';
-      }
-      renderSearchResults(val);
-    });
-
-    clearBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      clearBtn.style.display = 'none';
-      renderSearchResults('');
-      searchPanel.classList.remove('active');
-      searchInput.focus();
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!searchPanel.contains(e.target) && e.target !== searchInput && !clearBtn.contains(e.target)) {
-        searchPanel.classList.remove('active');
-      }
-    });
-
-    // subscription form logic
-    const subForm = document.getElementById('subscriptionRootForm');
-    if (subForm) {
-      subForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const emailInput = document.getElementById('subsEmail');
-        const email = emailInput.value.trim();
-        if (email && email.includes('@') && email.includes('.')) {
-          const btn = subForm.querySelector('button');
-          const originalText = btn.innerText;
-          btn.innerHTML = '<i class="fas fa-check-circle"></i> Welcome!';
-          btn.style.background = '#2F6B47';
-          emailInput.value = '';
-          setTimeout(() => {
-            btn.innerHTML = 'Subscribe →';
-            btn.style.background = '#C69C6D';
-          }, 2400);
-          console.log(`✅ AXEPEAK subscription: ${email}`);
-        } else {
-          alert('Please provide a valid email address to continue the journey.');
-        }
       });
     }
+  }
 
-    // smooth anchor scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        const targetId = this.getAttribute('href');
-        if (targetId === "#" || targetId === "") return;
-        const targetElem = document.querySelector(targetId);
-        if (targetElem) {
-          e.preventDefault();
-          targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+  function addToCart(name, price) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) existing.qty++;
+    else cart.push({ name, price, qty: 1 });
+    saveCart();
+    alert(`✨ ${name} added to cart!`);
+  }
+
+  document.querySelectorAll('.add-to-cart').forEach(btn => {
+    const card = btn.closest('.product-card');
+    const name = card.querySelector('.product-title').innerText;
+    const priceText = card.querySelector('.product-price').innerText;
+    const price = parseFloat(priceText.replace('$', ''));
+    btn.addEventListener('click', () => addToCart(name, price));
+  });
+
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const products = document.querySelectorAll('.product-card');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentFilter = btn.dataset.cat;
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      products.forEach(p => {
+        if (currentFilter === 'all' || p.dataset.cat === currentFilter) p.style.display = 'block';
+        else p.style.display = 'none';
       });
     });
-  })();
+  });
+
+  const modal = document.getElementById('cartModal');
+  document.getElementById('cartButton').addEventListener('click', () => {
+    updateCartUI();
+    modal.classList.add('active');
+  });
+  document.querySelector('.close-modal').addEventListener('click', () => modal.classList.remove('active'));
+
+  function processPayment(method) {
+    if (cart.length === 0) { alert('Cart is empty'); return; }
+    const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+    alert(`✅ Payment via ${method} successful!\nTotal: $${total.toFixed(2)}\nThank you for shopping at AXEPEAK.\n\nREACH YOUR PEAK!`);
+    cart = [];
+    saveCart();
+    modal.classList.remove('active');
+  }
+  document.getElementById('payCard').addEventListener('click', () => processPayment('Credit Card'));
+  document.getElementById('payApple').addEventListener('click', () => processPayment('Apple Pay'));
+  document.getElementById('payPaypal').addEventListener('click', () => processPayment('PayPal'));
+
+  updateCartUI();
 </script>
 </body>
 </html>
