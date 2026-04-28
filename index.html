@@ -4,228 +4,332 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>AXEPEAK | Timeless Apparel — Reach Your Peak</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      cursor: none;
     }
+
+    /* ========== CUSTOM CURSOR ========== */
+    .custom-cursor {
+      width: 28px;
+      height: 28px;
+      border: 2px solid #FFC86E;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 15px rgba(255, 200, 110, 0.5);
+      backdrop-filter: blur(2px);
+    }
+    .custom-cursor::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px;
+      height: 6px;
+      background: #FFC86E;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #FFC86E;
+    }
+    .custom-cursor.hover {
+      width: 40px;
+      height: 40px;
+      border-color: #E8A84A;
+      box-shadow: 0 0 25px rgba(255, 200, 110, 0.8);
+    }
+    
+    a, button, .filter-btn, .add-to-cart, .nav-link, .icon-btn, .cart-btn, .shop-btn, .pay-method, .modal-btn, .close-modal, .social-icon, .lookbook-item {
+      cursor: none;
+    }
+
+    /* ========== SEARCH SUGGESTIONS ========== */
+    .search-container { position: relative; }
+    .search-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      margin-top: 8px;
+      border: 1px solid var(--border);
+      z-index: 1000;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+    }
+    .search-suggestions.active { display: block; }
+    .suggestion-item {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+      border-bottom: 1px solid var(--border);
+    }
+    .suggestion-item:hover { background: rgba(255, 200, 110, 0.15); }
+    .suggestion-img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; }
+    .suggestion-info { flex: 1; }
+    .suggestion-name { font-weight: 600; font-size: 14px; }
+    .suggestion-price { font-size: 12px; color: var(--sale); }
+    .no-results { padding: 20px; text-align: center; color: var(--text-secondary); font-size: 14px; }
+
+    /* ========== COLOR SWATCHES ========== */
+    .color-swatches {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 12px 0;
+      flex-wrap: wrap;
+    }
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .color-swatch:hover {
+      transform: scale(1.15);
+    }
+    .color-swatch.selected {
+      border-color: var(--gold);
+      transform: scale(1.1);
+      box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--gold);
+    }
+    .color-swatch.black { background-color: #1a1a1a; }
+    .color-swatch.white { background-color: #f5f5f5; border: 1px solid #ddd; }
+    .color-swatch.navy { background-color: #1B2A4A; }
+    .color-swatch.grey { background-color: #6B6B6B; }
+    .color-swatch.olive { background-color: #5B6E3E; }
+    .color-swatch.burgundy { background-color: #6E2C2C; }
+    .color-swatch.blue { background-color: #2C5F8A; }
+    .color-swatch.beige { background-color: #D4C4A8; }
+    .color-swatch.green { background-color: #2D5A3F; }
+
+    /* ========== LOADING ANIMATION ========== */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0A0F0D;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s ease;
+    }
+    body.light .loading-overlay { background: #F5F0E8; }
+    .loading-overlay.fade-out { opacity: 0; visibility: hidden; }
+    
+    .loader-container { text-align: center; position: relative; }
+    .loader-peak {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 30px;
+      position: relative;
+    }
+    .loader-peak svg {
+      width: 100%;
+      height: 100%;
+      animation: peakFloat 2s ease-in-out infinite;
+    }
+    @keyframes peakFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .loader-brand {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: 12px;
+      background: linear-gradient(135deg, #FFC86E 0%, #E8A84A 40%, #FFC86E 100%);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: shimmer 2s linear infinite, fadeInUp 0.8s ease;
+      margin-bottom: 15px;
+    }
+    @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .loader-tagline {
+      font-size: 18px;
+      letter-spacing: 8px;
+      color: #FFC86E;
+      text-transform: uppercase;
+      font-weight: 500;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 20px;
+      animation: fadeInUp 0.8s ease 0.2s backwards;
+    }
+    .loader-tagline::before, .loader-tagline::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      width: 40px;
+      height: 2px;
+      background: #FFC86E;
+      animation: lineGrow 1s ease-out 0.5s both;
+    }
+    .loader-tagline::before { left: -50px; }
+    .loader-tagline::after { right: -50px; }
+    @keyframes lineGrow { from { width: 0; opacity: 0; } to { width: 40px; opacity: 1; } }
+    .loader-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 30px;
+    }
+    .loader-dots span {
+      width: 10px;
+      height: 10px;
+      background: #FFC86E;
+      border-radius: 50%;
+      animation: dotPulse 1.4s ease-in-out infinite;
+    }
+    .loader-dots span:nth-child(1) { animation-delay: 0s; }
+    .loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotPulse { 0%,100% { transform: scale(0.5); opacity: 0.3; } 50% { transform: scale(1.2); opacity: 1; } }
+    .loader-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,200,110,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: glowPulse 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+    @keyframes glowPulse { 0%,100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.2); } }
+
+    .main-content { opacity: 0; transition: opacity 0.8s ease; }
+    .main-content.visible { opacity: 1; }
+    .fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
 
     body {
       font-family: 'Arial', sans-serif;
       background: #0A0F0D;
       color: #F0E6D0;
       min-height: 100vh;
-      position: relative;
       overflow-x: hidden;
       transition: background 0.3s ease;
     }
 
-    /* MOUNTAIN BACKGROUND FOR DARK MODE */
-    .mountain-bg {
+    /* Celestial Body */
+    .celestial-body {
+      position: fixed;
+      top: 18%;
+      z-index: 1;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      pointer-events: none;
+      transition: left 0.8s cubic-bezier(0.4, 0.2, 0.2, 1), background 0.3s ease;
+      filter: drop-shadow(0 0 15px rgba(255,200,110,0.5));
+      will-change: transform;
+    }
+    body:not(.light) .celestial-body {
+      left: 35%;
+      background: radial-gradient(circle at 30% 30%, #F5E6D3, #E8D5B7);
+      box-shadow: 0 0 20px rgba(255,220,150,0.4), inset -8px -5px 0 rgba(0,0,0,0.1);
+    }
+    body.light .celestial-body {
+      left: 55%;
+      background: radial-gradient(circle at 30% 30%, #FFE066, #FFB347);
+      box-shadow: 0 0 30px rgba(255,180,50,0.6);
+    }
+
+    /* Parallax Background */
+    .parallax-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .mountain-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: linear-gradient(180deg, #0A0F0D 0%, #1A1F2E 40%, #0D1117 100%);
       transition: background 0.3s ease;
     }
-
-    /* Mountain silhouettes */
+    body.light .mountain-bg { background: linear-gradient(180deg, #E8E0D5 0%, #F5F0E8 50%, #E8E0D5 100%); }
+    
     .mountain-silhouette {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
       height: 85%;
-      z-index: -1;
       pointer-events: none;
+      transition: transform 0.1s ease-out;
     }
-
     .mountain-svg {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
-    /* Dark mode mountain colors */
     body:not(.light) .mountain-svg path:nth-child(1) { fill: rgba(255,200,110,0.08); }
     body:not(.light) .mountain-svg path:nth-child(2) { fill: rgba(255,200,110,0.12); }
     body:not(.light) .mountain-svg path:nth-child(3) { fill: rgba(255,200,110,0.25); }
     body:not(.light) .mountain-svg path:nth-child(4) { fill: rgba(255,255,255,0.15); }
     body:not(.light) .mountain-svg path:nth-child(5) { fill: rgba(255,200,110,0.18); }
+    body.light .mountain-svg path:nth-child(1) { fill: rgba(100,80,50,0.06); }
+    body.light .mountain-svg path:nth-child(2) { fill: rgba(100,80,50,0.1); }
+    body.light .mountain-svg path:nth-child(3) { fill: rgba(139,109,70,0.2); }
+    body.light .mountain-svg path:nth-child(4) { fill: rgba(180,150,110,0.12); }
+    body.light .mountain-svg path:nth-child(5) { fill: rgba(100,80,50,0.14); }
 
-    /* Light mode mountain colors */
-    body.light .mountain-bg {
-      background: linear-gradient(180deg, #E8E0D5 0%, #F5F0E8 50%, #E8E0D5 100%);
-    }
-    body.light .mountain-svg path:nth-child(1) { fill: rgba(100, 80, 50, 0.06); }
-    body.light .mountain-svg path:nth-child(2) { fill: rgba(100, 80, 50, 0.1); }
-    body.light .mountain-svg path:nth-child(3) { fill: rgba(139, 109, 70, 0.2); }
-    body.light .mountain-svg path:nth-child(4) { fill: rgba(180, 150, 110, 0.12); }
-    body.light .mountain-svg path:nth-child(5) { fill: rgba(100, 80, 50, 0.14); }
-
-    /* MOON/SUN - Celestial body that moves and transforms */
-    .celestial-body {
-      position: fixed;
-      top: 18%;
-      z-index: 0;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      pointer-events: none;
-      transition: all 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
-      filter: drop-shadow(0 0 15px rgba(255,200,110,0.5));
-    }
-    
-    /* Moon position (left of peak) - dark mode */
-    body:not(.light) .celestial-body {
-      left: 35%;
-      background: radial-gradient(circle at 30% 30%, #F5E6D3, #E8D5B7);
-      box-shadow: 0 0 20px rgba(255,220,150,0.4), inset -8px -5px 0 rgba(0,0,0,0.1);
-    }
-    
-    /* Moon craters effect */
-    body:not(.light) .celestial-body::before {
-      content: '';
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      background: rgba(0,0,0,0.1);
-      border-radius: 50%;
-      top: 20%;
-      left: 25%;
-      box-shadow: 20px 35px 0 rgba(0,0,0,0.08), 45px 15px 0 rgba(0,0,0,0.06), -10px 50px 0 rgba(0,0,0,0.07);
-    }
-    
-    /* Sun position (right of peak) - light mode */
-    body.light .celestial-body {
-      left: 55%;
-      background: radial-gradient(circle at 30% 30%, #FFE066, #FFB347);
-      box-shadow: 0 0 30px rgba(255,180,50,0.6);
-    }
-    
-    /* Sun rays effect */
-    body.light .celestial-body::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 120%;
-      height: 120%;
-      background: radial-gradient(circle, rgba(255,200,100,0.3) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      animation: sunPulse 3s ease-in-out infinite;
-    }
-    
-    @keyframes sunPulse {
-      0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-      50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
-    }
-    
-    /* Animated fog/mist */
-    .mist {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 45%;
-      background: linear-gradient(180deg, transparent, rgba(255,200,110,0.06), rgba(255,200,110,0.12));
-      pointer-events: none;
-      z-index: 0;
-      animation: mistMove 20s ease-in-out infinite;
-      transition: opacity 0.3s ease;
-    }
-    body.light .mist {
-      background: linear-gradient(180deg, transparent, rgba(139, 109, 70, 0.05), rgba(139, 109, 70, 0.1));
-    }
-
-    @keyframes mistMove {
-      0%, 100% { opacity: 0.3; transform: translateX(0); }
-      50% { opacity: 0.7; transform: translateX(3%); }
-    }
-
-    /* Floating particles */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
+    .mist, .peak-light, .particles, .glow-orb { pointer-events: none; position: fixed; z-index: 0; }
+    .mist { bottom: 0; width: 100%; height: 45%; background: linear-gradient(180deg, transparent, rgba(255,200,110,0.06), rgba(255,200,110,0.12)); animation: mistMove 20s infinite; }
+    @keyframes mistMove { 0%,100% { opacity: 0.3; transform: translateX(0); } 50% { opacity: 0.7; transform: translateX(3%); } }
+    .peak-light { top: 12%; left: 50%; width: 500px; height: 500px; background: radial-gradient(ellipse, rgba(255,200,110,0.12) 0%, transparent 70%); border-radius: 50%; transform: translateX(-50%); animation: pulseLight 8s infinite; }
+    @keyframes pulseLight { 0%,100% { opacity: 0.2; transform: translateX(-50%) scale(1); } 50% { opacity: 0.5; transform: translateX(-50%) scale(1.3); } }
+    .particles { top: 0; width: 100%; height: 100%; overflow: hidden; }
     .particle {
       position: absolute;
-      background: rgba(255, 200, 110, 0.25);
+      background: rgba(255,200,110,0.25);
       border-radius: 50%;
-      pointer-events: none;
       animation: floatParticle linear infinite;
     }
-    body.light .particle {
-      background: rgba(139, 109, 70, 0.15);
-    }
-
     @keyframes floatParticle {
-      0% {
-        transform: translateY(100vh) translateX(0) rotate(0deg);
-        opacity: 0;
-      }
-      10% { opacity: 0.6; }
-      90% { opacity: 0.3; }
-      100% {
-        transform: translateY(-100vh) translateX(80px) rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10% { opacity: 0.6; } 90% { opacity: 0.3; }
+      100% { transform: translateY(-100vh) translateX(80px); opacity: 0; }
     }
-
-    /* Dramatic light beam from mountain peak */
-    .peak-light {
-      position: fixed;
-      top: 12%;
-      left: 50%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(ellipse, rgba(255,200,110,0.12) 0%, transparent 70%);
-      border-radius: 50%;
-      transform: translateX(-50%);
-      pointer-events: none;
-      z-index: 0;
-      animation: pulseLight 8s ease-in-out infinite;
-    }
-    body.light .peak-light {
-      background: radial-gradient(ellipse, rgba(139, 109, 70, 0.1) 0%, transparent 70%);
-    }
-
-    @keyframes pulseLight {
-      0%, 100% { opacity: 0.2; transform: translateX(-50%) scale(1); }
-      50% { opacity: 0.5; transform: translateX(-50%) scale(1.3); }
-    }
-
-    /* Floating orbs */
     .glow-orb {
-      position: fixed;
       background: radial-gradient(circle, rgba(255,200,110,0.2), transparent);
       border-radius: 50%;
+      animation: floatGlow 15s infinite;
       pointer-events: none;
       z-index: 0;
-      animation: floatGlow 15s ease-in-out infinite;
     }
-    body.light .glow-orb {
-      background: radial-gradient(circle, rgba(139, 109, 70, 0.12), transparent);
-    }
+    @keyframes floatGlow { 0%,100% { transform: translate(0,0) scale(1); opacity: 0.1; } 50% { transform: translate(30px,-20px) scale(1.2); opacity: 0.3; } }
 
-    @keyframes floatGlow {
-      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.1; }
-      50% { transform: translate(30px, -20px) scale(1.2); opacity: 0.3; }
-    }
-
-    /* Light/Dark Mode Variables */
+    /* Light/Dark Variables */
     :root {
       --card-bg: rgba(30, 35, 50, 0.7);
       --text: #F0E6D0;
@@ -252,13 +356,16 @@
     }
 
     .wrapper { max-width: 1400px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2; }
+    .announcement-bar { background: var(--gold); color: #0D1117; text-align: center; padding: 10px; font-size: 14px; font-weight: 600; letter-spacing: 1px; position: relative; z-index: 10; }
     
-    /* Header */
     .top-bar {
+      position: sticky;
+      top: 10px;
+      z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 20px;
+      padding: 20px;
       flex-wrap: wrap;
       gap: 15px;
       background: var(--header-bg);
@@ -268,610 +375,470 @@
       transition: all 0.3s ease;
     }
     .logo-area { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-    .logo-text { font-size: 28px; font-weight: 800; color: var(--gold); cursor: pointer; transition: transform 0.3s ease; }
-    .logo-text:hover { transform: scale(1.05); text-shadow: 0 0 10px rgba(255,200,110,0.5); }
-    .search-container { position: relative; }
+    .logo-text { font-size: 28px; font-weight: 800; color: var(--gold); cursor: pointer; transition: transform 0.3s; }
     .search-input {
-      background: var(--input-bg);
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      padding: 10px 16px 10px 40px;
-      width: 220px;
-      color: var(--text);
-      outline: none;
-      transition: all 0.3s ease;
+      background: var(--input-bg); border: 1px solid var(--border); border-radius: 40px;
+      padding: 10px 16px 10px 40px; width: 220px; color: var(--text); outline: none; transition: 0.3s;
     }
-    .search-input:focus { border-color: var(--gold); width: 260px; box-shadow: 0 0 15px rgba(255,200,110,0.3); }
-    .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gold);
-    }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--gold); }
     .header-buttons { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-    .nav-link {
-      background: rgba(255, 200, 110, 0.15);
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      padding: 8px 18px;
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--gold);
-      text-decoration: none;
-      transition: all 0.3s ease;
+    .nav-link, .icon-btn, .cart-btn {
+      background: rgba(255,200,110,0.15); border: 1px solid var(--border); border-radius: 40px;
+      padding: 8px 18px; cursor: pointer; font-weight: 600; color: var(--gold); text-decoration: none; transition: 0.3s;
     }
-    .nav-link:hover { background: var(--gold); color: #0D1117; transform: translateY(-2px); }
-    .icon-btn {
-      background: rgba(255, 200, 110, 0.15);
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      padding: 8px 18px;
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--gold);
-      transition: all 0.3s ease;
-    }
-    .icon-btn:hover { background: var(--gold); color: #0D1117; transform: translateY(-2px); }
-    .cart-btn {
-      background: var(--gold);
-      color: #0D1117;
-      border: none;
-      border-radius: 40px;
-      padding: 8px 20px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .cart-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,200,110,0.5); }
-    .cart-count {
-      background: #0D1117;
-      color: var(--gold);
-      border-radius: 50%;
-      padding: 2px 8px;
-      margin-left: 8px;
-    }
-    .theme-switch {
-      position: relative;
-      width: 50px;
-      height: 24px;
-    }
+    .nav-link:hover, .icon-btn:hover { background: var(--gold); color: #0D1117; transform: translateY(-2px); }
+    .cart-btn { background: var(--gold); color: #0D1117; border: none; }
+    .cart-count { background: #0D1117; color: var(--gold); border-radius: 50%; padding: 2px 8px; margin-left: 8px; }
+    .theme-switch { position: relative; width: 50px; height: 24px; }
     .theme-switch input { opacity: 0; width: 0; height: 0; }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #2A3642;
-      border-radius: 24px;
-      transition: 0.3s;
-    }
-    .slider:before {
-      position: absolute;
-      content: "🌙";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      transition: 0.3s;
-    }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #2A3642; border-radius: 24px; }
+    .slider:before { position: absolute; content: "🌙"; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; transition: 0.3s; }
     input:checked + .slider:before { transform: translateX(26px); content: "☀️"; }
     
-    /* Hero */
-    .hero { text-align: center; padding: 50px 20px; animation: fadeInUp 0.8s ease-out; }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .brand-name { font-size: 72px; font-weight: 900; color: var(--gold); text-shadow: 4px 4px 0 #583A10; margin-bottom: 20px; animation: glowPulse 3s ease-in-out infinite; }
-    body.light .brand-name { text-shadow: 4px 4px 0 #D4B896; }
-    @keyframes glowPulse {
-      0%, 100% { text-shadow: 4px 4px 0 #583A10, 0 0 10px rgba(255,200,110,0.3); }
-      50% { text-shadow: 4px 4px 0 #583A10, 0 0 25px rgba(255,200,110,0.6); }
-    }
+    .hero { text-align: center; padding: 50px 20px; }
+    .brand-name { font-size: 72px; font-weight: 900; color: var(--gold); text-shadow: 4px 4px 0 #583A10; margin-bottom: 20px; animation: glowPulse 3s infinite; }
+    @keyframes glowPulse { 0%,100% { text-shadow: 4px 4px 0 #583A10, 0 0 10px rgba(255,200,110,0.3); } 50% { text-shadow: 4px 4px 0 #583A10, 0 0 25px rgba(255,200,110,0.6); } }
     .quote-line { font-size: 22px; font-weight: 600; text-transform: uppercase; margin: 5px 0; }
     .peak-message { margin-top: 25px; font-size: 28px; font-weight: 800; letter-spacing: 4px; color: var(--gold); animation: pulse 2s infinite; }
     @keyframes pulse { 50% { opacity: 0.7; transform: scale(1.02); } }
-    .shop-btn { display: inline-block; margin-top: 30px; background: var(--gold); color: #0D1117; padding: 12px 40px; border-radius: 40px; text-decoration: none; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
-    .shop-btn:hover { transform: scale(1.05) translateY(-3px); box-shadow: 0 10px 30px rgba(255,200,110,0.4); }
+    .shop-btn { display: inline-block; margin-top: 30px; background: var(--gold); color: #0D1117; padding: 12px 40px; border-radius: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; }
     
-    /* TIMELESS SECTION */
-    .timeless-section { margin: 30px 0; border-radius: 28px; overflow: hidden; animation: fadeIn 0.8s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .timeless-banner {
-      display: flex;
-      flex-wrap: wrap;
-      background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%), url('https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1400&h=450&fit=crop');
-      background-size: cover;
-      background-position: center;
-      min-height: 320px;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+    .lookbook-section {
+      margin: 60px 0;
+      padding: 50px 20px;
+      background: rgba(255,200,110,0.03);
+      border-radius: 48px;
+      border: 1px solid var(--border);
+    }
+    .lookbook-title { text-align: center; font-size: 36px; font-weight: 900; color: var(--gold); letter-spacing: 8px; margin-bottom: 20px; }
+    .lookbook-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 50px; font-size: 16px; letter-spacing: 2px; }
+    .lookbook-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 35px; }
+    .lookbook-item {
+      position: relative;
       border-radius: 28px;
-      transition: transform 0.5s ease;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
     }
-    .timeless-banner:hover { transform: scale(1.01); }
-    .timeless-banner h2 {
-      font-size: 56px;
-      font-weight: 800;
-      letter-spacing: 12px;
-      color: var(--gold);
-      text-shadow: 3px 3px 0 rgba(0,0,0,0.5);
-      background: rgba(0,0,0,0.3);
-      padding: 20px 40px;
-      border-radius: 60px;
-      backdrop-filter: blur(4px);
+    .lookbook-item:hover { transform: translateY(-12px); box-shadow: 0 25px 45px rgba(0,0,0,0.3); }
+    .lookbook-img { width: 100%; height: 450px; object-fit: cover; transition: transform 0.6s ease; }
+    .lookbook-item:hover .lookbook-img { transform: scale(1.05); }
+    .lookbook-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, transparent 100%);
+      padding: 35px 25px 25px;
+      transform: translateY(30px);
+      transition: transform 0.4s ease;
     }
+    .lookbook-item:hover .lookbook-overlay { transform: translateY(0); }
+    .lookbook-overlay h3 { color: var(--gold); font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .lookbook-overlay p { color: #fff; font-size: 14px; opacity: 0.85; margin-bottom: 12px; }
+    .lookbook-tag { display: inline-block; background: var(--gold); color: #0D1117; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
     
-    /* Categories */
+    .timeless-banner {
+      display: flex; background: linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1400&h=450&fit=crop');
+      background-size: cover; background-position: center; min-height: 320px;
+      align-items: center; justify-content: center; border-radius: 28px; margin: 30px 0;
+    }
+    .timeless-banner h2 { font-size: 56px; font-weight: 800; letter-spacing: 12px; color: var(--gold); background: rgba(0,0,0,0.3); padding: 20px 40px; border-radius: 60px; backdrop-filter: blur(4px); }
+    
     .category-filters { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 30px 0; }
     .filter-btn {
-      background: rgba(255, 200, 110, 0.1);
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      padding: 8px 20px;
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--text);
-      transition: all 0.3s ease;
+      background: rgba(255,200,110,0.1); border: 1px solid var(--border); border-radius: 40px;
+      padding: 8px 20px; cursor: pointer; font-weight: 600; color: var(--text); transition: 0.3s;
     }
     .filter-btn.active, .filter-btn:hover { background: var(--gold); color: #0D1117; transform: translateY(-2px); }
     
-    /* Products Grid */
     .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin: 40px 0; }
     .product-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border-radius: 28px;
-      padding: 20px;
-      text-align: center;
-      border: 1px solid var(--border);
-      position: relative;
-      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-      animation: cardAppear 0.5s ease-out backwards;
+      background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 28px; padding: 20px;
+      text-align: center; border: 1px solid var(--border); transition: all 0.4s;
     }
-    @keyframes cardAppear {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .product-card:nth-child(1) { animation-delay: 0.05s; }
-    .product-card:nth-child(2) { animation-delay: 0.1s; }
-    .product-card:nth-child(3) { animation-delay: 0.15s; }
-    .product-card:nth-child(4) { animation-delay: 0.2s; }
-    .product-card:hover { transform: translateY(-10px) scale(1.02); border-color: var(--gold); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-    .sale-badge {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: var(--sale);
-      color: white;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      animation: bounce 1s ease infinite;
-    }
-    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-    .product-img { width: 100%; height: 240px; object-fit: cover; border-radius: 20px; margin-bottom: 15px; transition: transform 0.5s ease; }
+    .product-card:hover { transform: translateY(-10px) scale(1.02); border-color: var(--gold); }
+    .product-img { width: 100%; height: 220px; object-fit: cover; border-radius: 20px; margin-bottom: 15px; transition: transform 0.5s; }
     .product-card:hover .product-img { transform: scale(1.05); }
-    .product-title { font-size: 18px; font-weight: 800; margin: 10px 0; text-transform: capitalize; }
+    .product-title { font-size: 18px; font-weight: 800; margin: 10px 0; }
     .price-container { display: flex; justify-content: center; gap: 12px; margin: 10px 0; }
     .original-price { text-decoration: line-through; color: var(--text-secondary); }
     .product-price { font-size: 24px; font-weight: 800; color: var(--sale); }
-    .add-to-cart {
-      background: none;
-      border: none;
-      border-bottom: 2px solid var(--gold);
-      color: var(--text);
-      padding: 8px 20px;
-      cursor: pointer;
-      font-weight: 600;
-      margin-top: 10px;
-      transition: all 0.3s ease;
-    }
-    .add-to-cart:hover { color: var(--gold); border-bottom-color: var(--gold); letter-spacing: 2px; }
+    .modal-btn { background: var(--gold); border: none; border-radius: 40px; padding: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
     
-    /* Follow Us Section */
-    .follow-section {
-      text-align: center;
-      padding: 60px 20px;
-      margin: 40px 0;
-      background: linear-gradient(135deg, rgba(255, 200, 110, 0.08) 0%, rgba(255, 200, 110, 0.02) 100%);
-      border-radius: 60px;
-      border: 1px solid var(--border);
+    .reviews-section, .story-section, .follow-section, .subscribe-section {
+      background: rgba(255,200,110,0.05); padding: 50px 20px; border-radius: 28px; margin: 40px 0; text-align: center;
     }
-    body.light .follow-section {
-      background: linear-gradient(135deg, rgba(198, 139, 62, 0.06) 0%, rgba(198, 139, 62, 0.01) 100%);
-    }
-    .follow-title { font-size: 36px; font-weight: 800; color: var(--gold); margin-bottom: 15px; letter-spacing: 3px; }
-    .instagram-card {
-      display: inline-flex;
-      align-items: center;
-      gap: 20px;
-      background: linear-gradient(135deg, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-      padding: 18px 40px;
-      border-radius: 80px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    .instagram-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 20px 40px rgba(214, 36, 159, 0.3); }
-    .ig-icon-large { width: 42px; height: 42px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; }
-    .instagram-card span:last-child { font-size: 20px; font-weight: 700; color: white; letter-spacing: 1px; }
-    .ig-stats { display: flex; gap: 30px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
-    .ig-stat-number { font-size: 24px; font-weight: 800; color: var(--gold); }
-    .hashtag { margin-top: 25px; font-size: 14px; color: var(--gold-dark); letter-spacing: 2px; }
+    .featured-title { font-size: 32px; font-weight: 800; margin-bottom: 20px; color: var(--gold); letter-spacing: 2px; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+    .review-card { background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--border); }
+    .review-stars { color: var(--gold); margin-bottom: 10px; }
+    .story-content { max-width: 800px; margin: 0 auto; font-size: 18px; line-height: 1.6; }
     
-    /* Subscribe Section */
-    .subscribe-section {
-      background: rgba(255, 200, 110, 0.05);
-      padding: 50px 20px;
-      text-align: center;
-      margin: 30px 0;
-      border-radius: 28px;
-      transition: transform 0.3s ease;
+    .social-links { display: flex; justify-content: center; gap: 25px; margin-top: 20px; flex-wrap: wrap; }
+    .social-icon {
+      display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px;
+      background: rgba(255,200,110,0.1); border-radius: 50%; color: var(--gold); font-size: 24px;
+      transition: all 0.3s ease; text-decoration: none;
     }
-    body.light .subscribe-section {
-      background: rgba(198, 139, 62, 0.04);
-    }
-    .subscribe-section:hover { transform: translateY(-3px); }
-    .subscribe-title { font-size: 32px; font-weight: 800; margin-bottom: 20px; color: var(--gold); }
+    .social-icon:hover { background: var(--gold); color: #0D1117; transform: translateY(-3px); }
+    
     .subscribe-form { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; max-width: 500px; margin: 0 auto; }
     .subscribe-form input {
-      flex: 1;
-      padding: 14px 22px;
-      border-radius: 60px;
-      border: 1px solid var(--border);
-      background: var(--input-bg);
-      color: var(--text);
-      outline: none;
-      transition: all 0.3s ease;
+      flex: 1; padding: 14px 22px; border-radius: 60px; border: 1px solid var(--border);
+      background: var(--input-bg); color: var(--text);
     }
-    .subscribe-form input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(255,200,110,0.3); }
-    .subscribe-form button {
-      background: var(--gold);
-      border: none;
-      padding: 14px 32px;
-      border-radius: 60px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .subscribe-form button:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(255,200,110,0.4); }
+    .subscribe-form button { background: var(--gold); border: none; padding: 14px 32px; border-radius: 60px; font-weight: bold; cursor: pointer; }
     
-    /* Modal */
     .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 1000;
+      justify-content: center; align-items: center;
     }
     .modal.active { display: flex; }
     .modal-content {
-      background: var(--modal-bg);
-      border-radius: 28px;
-      padding: 30px;
-      max-width: 450px;
-      width: 90%;
-      border: 1px solid var(--gold);
-      max-height: 80vh;
-      overflow-y: auto;
+      background: var(--modal-bg); border-radius: 28px; padding: 30px;
+      max-width: 500px; width: 90%; border: 1px solid var(--gold); max-height: 85vh; overflow-y: auto;
     }
-    .modal-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); }
-    .modal-btn { width: 100%; padding: 12px; margin-top: 10px; background: var(--gold); border: none; border-radius: 40px; font-weight: bold; cursor: pointer; }
-    .payment-options { display: flex; gap: 15px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
-    .pay-btn { padding: 12px 24px; border-radius: 40px; border: none; font-weight: bold; cursor: pointer; }
-    .pay-card { background: #2A3642; color: white; border: 1px solid var(--gold); }
-    body.light .pay-card { background: #E8E0D5; color: #2C2B28; }
-    .pay-apple { background: black; color: white; }
-    .pay-paypal { background: #0070BA; color: white; }
-    .close-modal { background: none; border: 1px solid var(--gold); color: var(--text); padding: 10px; border-radius: 40px; cursor: pointer; width: 100%; margin-top: 15px; }
-    .switch-modal { text-align: center; margin-top: 15px; font-size: 14px; }
-    .switch-modal span { color: var(--gold); cursor: pointer; text-decoration: underline; }
-    .error-msg { color: var(--sale); font-size: 12px; margin-top: 5px; }
+    .payment-options { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+    .pay-method {
+      background: var(--input-bg); border: 1px solid var(--border); border-radius: 60px;
+      padding: 14px 20px; cursor: pointer; font-weight: 600; transition: 0.2s; display: flex; align-items: center; gap: 12px;
+    }
+    .pay-method:hover { background: var(--gold); color: #0D1117; border-color: var(--gold); }
+    .close-modal { background: none; border: 1px solid var(--gold); border-radius: 40px; padding: 10px; cursor: pointer; width: 100%; margin-top: 10px; color: var(--text); }
     
-    /* Page Navigation */
     .page-section { display: none; }
-    .page-section.active-page { display: block; animation: fadeIn 0.5s ease; }
+    .page-section.active-page { display: block; animation: fadeIn 0.5s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     
     .footer { text-align: center; padding: 40px; color: var(--text-secondary); }
-    .footer .peak { margin-top: 15px; color: var(--gold); }
+    .footer-links { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px; }
+    .footer-links a { color: var(--gold); text-decoration: none; }
+    .footer-social { margin: 20px 0; }
     
     @media (max-width: 700px) {
       .brand-name { font-size: 44px; }
       .quote-line { font-size: 16px; }
-      .peak-message { font-size: 20px; }
       .top-bar { flex-direction: column; }
       .search-input { width: 100%; }
-      .search-input:focus { width: 100%; }
       .timeless-banner h2 { font-size: 32px; letter-spacing: 6px; }
-      .timeless-banner { min-height: 220px; }
-      .instagram-card { padding: 12px 25px; }
-      .instagram-card span:last-child { font-size: 16px; }
       .celestial-body { width: 50px; height: 50px; top: 15%; }
       body:not(.light) .celestial-body { left: 30%; }
       body.light .celestial-body { left: 60%; }
+      .lookbook-grid { grid-template-columns: 1fr; }
+      .lookbook-img { height: 350px; }
+      .custom-cursor { display: none; }
+      body { cursor: auto; }
     }
   </style>
 </head>
 <body>
-  <!-- MOON/SUN - Moves from left to right of peak and transforms -->
-  <div class="celestial-body"></div>
-  
-  <!-- LARGE MOUNTAIN BACKGROUND WITH PROMINENT PEAK -->
-  <div class="mountain-bg"></div>
-  <div class="mountain-silhouette">
-    <svg class="mountain-svg" viewBox="0 0 1440 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,400L60,380C120,360,240,320,360,300C480,280,600,280,720,290C840,300,960,320,1080,310C1200,300,1320,280,1380,270L1440,260L1440,500L1380,500C1320,500,1200,500,1080,500C960,500,840,500,720,500C600,500,480,500,360,500C240,500,120,500,60,500L0,500Z"></path>
-      <path d="M0,380L60,350C120,320,240,260,340,230C440,200,520,220,600,250C680,280,760,310,840,300C920,290,1000,260,1100,250C1200,240,1320,260,1380,270L1440,280L1440,500L1380,500C1320,500,1200,500,1080,500C960,500,840,500,720,500C600,500,480,500,360,500C240,500,120,500,60,500L0,500Z"></path>
-      <path d="M0,400L120,370C240,340,360,300,480,220C540,180,580,140,620,100C660,60,680,30,700,10C710,2,720,0,730,5C740,12,750,30,760,55C780,90,800,130,840,180C900,250,960,290,1020,320C1080,350,1200,380,1320,395L1440,400L1440,500L1320,500C1200,500,1080,500,1020,500C960,500,900,500,840,500C780,500,720,500,660,500C600,500,540,500,480,500C360,500,240,500,120,500L0,500Z"></path>
-      <path d="M660,80C672,60,688,45,700,12C710,2,720,0,730,5C740,12,745,25,750,40C740,35,720,38,700,50C680,62,670,72,660,80Z"></path>
-      <path d="M0,450L80,420C160,390,320,350,480,370C640,390,800,430,960,420C1120,410,1280,380,1360,370L1440,360L1440,500L1360,500C1280,500,1120,500,960,500C800,500,640,500,480,500C320,500,160,500,80,500L0,500Z"></path>
-    </svg>
-  </div>
-  <div class="mist"></div>
-  <div class="peak-light"></div>
-  <div class="particles" id="particles"></div>
-  
-  <!-- Floating orbs -->
-  <div class="glow-orb" style="width: 200px; height: 200px; bottom: 10%; left: 5%; animation-duration: 18s;"></div>
-  <div class="glow-orb" style="width: 150px; height: 150px; top: 20%; right: 8%; animation-duration: 22s;"></div>
-  <div class="glow-orb" style="width: 100px; height: 100px; bottom: 30%; right: 15%; animation-duration: 14s;"></div>
 
-<div class="wrapper">
-  <div class="top-bar">
-    <div class="logo-area">
-      <div class="logo-text" id="homeLogo">AXEPEAK</div>
-      <div class="search-container">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
-      </div>
-    </div>
-    <div class="header-buttons">
-      <a href="#" class="nav-link" id="shopNavLink">🛍️ SHOP</a>
-      <a href="#" class="nav-link" id="homeNavLink">🏠 HOME</a>
-      <button id="accountBtn" class="icon-btn">👤 Account</button>
-      <label class="theme-switch">
-        <input type="checkbox" id="themeToggle">
-        <span class="slider"></span>
-      </label>
-      <button id="cartButton" class="cart-btn">🛒 Cart <span id="cartCount" class="cart-count">0</span></button>
-    </div>
-  </div>
+<div class="custom-cursor" id="customCursor"></div>
 
-  <div id="homePage" class="page-section active-page">
-    <div class="hero">
-      <div class="brand-name">AXEPEAK</div>
-      <div class="quote-line">LIFE'S JOURNEY IS FILLED WITH OBSTACLES</div>
-      <div class="quote-line">BUT WITH EVERY STEP YOU TAKE</div>
-      <div class="quote-line">YOU'RE MAKING A DIFFERENCE.</div>
-      <div class="peak-message">✦ REACH YOUR PEAK ✦</div>
-      <button class="shop-btn" id="heroShopBtn">SHOP NOW</button>
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="loader-glow"></div>
+  <div class="loader-container">
+    <div class="loader-peak">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M20,80 L40,40 L55,60 L70,30 L85,55 L95,80" stroke="#FFC86E" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M20,80 L95,80" stroke="#FFC86E" stroke-width="2"/>
+        <circle cx="50" cy="25" r="5" fill="#FFC86E" opacity="0.6">
+          <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
     </div>
-
-    <div class="timeless-section">
-      <div class="timeless-banner" style="background-image: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%), url('https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1400&h=450&fit=crop');">
-        <h2>TIMELESS</h2>
-      </div>
-    </div>
-
-    <div class="category-filters" id="categoryFilters">
-      <button class="filter-btn active" data-cat="all">ALL</button>
-      <button class="filter-btn" data-cat="t-shirt">👕 T-SHIRTS</button>
-      <button class="filter-btn" data-cat="sweatpant">🩳 SWEATPANTS</button>
-      <button class="filter-btn" data-cat="hoodie">🧥 HOODIES</button>
-      <button class="filter-btn" data-cat="shirt">👔 SHIRTS</button>
-      <button class="filter-btn" data-cat="polo">🧶 POLOS</button>
-      <button class="filter-btn" data-cat="pants">👖 PANTS</button>
-    </div>
-
-    <div class="products-grid" id="productGrid"></div>
-  </div>
-
-  <div id="shopPage" class="page-section">
-    <div class="hero" style="padding: 30px 20px;">
-      <div class="brand-name" style="font-size: 48px;">SHOP COLLECTION</div>
-      <p style="margin-top: 10px;">Discover our complete range of timeless apparel</p>
-    </div>
-    <div class="timeless-section">
-      <div class="timeless-banner" style="background-image: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%), url('https://images.unsplash.com/photo-1483985988355-9e9f3a5b9d9e?w=1400&h=450&fit=crop');">
-        <h2>COMPLETE CATALOG</h2>
-      </div>
-    </div>
-    
-    <div class="category-filters" id="shopCategoryFilters">
-      <button class="filter-btn active" data-cat="all">ALL</button>
-      <button class="filter-btn" data-cat="t-shirt">👕 T-SHIRTS</button>
-      <button class="filter-btn" data-cat="sweatpant">🩳 SWEATPANTS</button>
-      <button class="filter-btn" data-cat="hoodie">🧥 HOODIES</button>
-      <button class="filter-btn" data-cat="shirt">👔 SHIRTS</button>
-      <button class="filter-btn" data-cat="polo">🧶 POLOS</button>
-      <button class="filter-btn" data-cat="pants">👖 PANTS</button>
-    </div>
-    
-    <div class="products-grid" id="shopProductGrid"></div>
-  </div>
-
-  <div class="follow-section">
-    <div class="follow-title">✨ @AXPEAK_OFFICIAL ✨</div>
-    <div class="follow-subtitle">Join the journey. Share your style.</div>
-    <a href="#" class="instagram-card" id="instagramLink">
-      <div class="ig-icon-large">📷</div>
-      <span>FOLLOW ON INSTAGRAM</span>
-    </a>
-    <div class="ig-stats">
-      <div class="ig-stat"><div class="ig-stat-number">42.5K</div><div class="ig-stat-label">FOLLOWERS</div></div>
-      <div class="ig-stat"><div class="ig-stat-number">1.2K</div><div class="ig-stat-label">POSTS</div></div>
-      <div class="ig-stat"><div class="ig-stat-number">∞</div><div class="ig-stat-label">COMMUNITY</div></div>
-    </div>
-    <div class="hashtag">✦ #AXEPEAKJOURNEY ✦ #REACHYOURPEAK ✦</div>
-  </div>
-
-  <div class="subscribe-section">
-    <div class="subscribe-title">SUBSCRIBE</div>
-    <p>Join the journey. Get first access to timeless collections.</p>
-    <form class="subscribe-form" id="subscribeForm">
-      <input type="email" id="subEmail" placeholder="Your email address" required>
-      <button type="submit">SUBSCRIBE →</button>
-    </form>
-  </div>
-
-  <div class="footer">
-    <p>✦ FOLLOW US on Instagram @axpeak_official for the latest product recommendations! ✦</p>
-    <p>© 2025 AXEPEAK — Every step makes a difference.</p>
-    <div class="peak">✦ REACH YOUR PEAK ✦</div>
+    <div class="loader-brand">AXEPEAK</div>
+    <div class="loader-tagline">✦ REACH YOUR PEAK ✦</div>
+    <div class="loader-dots"><span></span><span></span><span></span></div>
   </div>
 </div>
 
-<div id="cartModal" class="modal"><div class="modal-content"><h2>Your Cart 🛒</h2><div id="cartItems"></div><div id="cartTotal" style="font-size: 24px; margin: 20px 0;">Total: $0</div><div class="payment-options"><button id="payCard" class="pay-btn pay-card">💳 Credit Card</button><button id="payApple" class="pay-btn pay-apple">🍎 Apple Pay</button><button id="payPaypal" class="pay-btn pay-paypal">💰 PayPal</button></div><button class="close-modal">Close</button></div></div>
-<div id="accountModal" class="modal"><div class="modal-content" id="accountModalContent"></div></div>
+<div class="main-content" id="mainContent">
+  <div class="parallax-container">
+    <div class="mountain-bg"></div>
+    <div class="mountain-silhouette" id="parallaxMountain">
+      <svg class="mountain-svg" viewBox="0 0 1440 500" preserveAspectRatio="none">
+        <path d="M0,400L60,380C120,360,240,320,360,300C480,280,600,280,720,290C840,300,960,320,1080,310C1200,300,1320,280,1380,270L1440,260L1440,500L1380,500C1320,500,1200,500,1080,500C960,500,840,500,720,500C600,500,480,500,360,500C240,500,120,500,60,500L0,500Z"></path>
+        <path d="M0,380L60,350C120,320,240,260,340,230C440,200,520,220,600,250C680,280,760,310,840,300C920,290,1000,260,1100,250C1200,240,1320,260,1380,270L1440,280L1440,500L1380,500C1320,500,1200,500,1080,500C960,500,840,500,720,500C600,500,480,500,360,500C240,500,120,500,60,500L0,500Z"></path>
+        <path d="M0,400L120,370C240,340,360,300,480,220C540,180,580,140,620,100C660,60,680,30,700,10C710,2,720,0,730,5C740,12,750,30,760,55C780,90,800,130,840,180C900,250,960,290,1020,320C1080,350,1200,380,1320,395L1440,400L1440,500L1320,500C1200,500,1080,500,1020,500C960,500,900,500,840,500C780,500,720,500,660,500C600,500,540,500,480,500C360,500,240,500,120,500L0,500Z"></path>
+        <path d="M660,80C672,60,688,45,700,12C710,2,720,0,730,5C740,12,745,25,750,40C740,35,720,38,700,50C680,62,670,72,660,80Z"></path>
+        <path d="M0,450L80,420C160,390,320,350,480,370C640,390,800,430,960,420C1120,410,1280,380,1360,370L1440,360L1440,500L1360,500C1280,500,1120,500,960,500C800,500,640,500,480,500C320,500,160,500,80,500L0,500Z"></path>
+      </svg>
+    </div>
+  </div>
+  
+  <div class="celestial-body" id="parallaxSun"></div>
+  <div class="mist"></div>
+  <div class="peak-light"></div>
+  <div class="particles" id="particles"></div>
+  <div class="glow-orb" style="width:200px;height:200px;bottom:10%;left:5%;"></div>
+
+  <div class="announcement-bar">✧ FREE WORLDWIDE SHIPPING ON ORDERS OVER $100 ✧</div>
+  
+  <div class="wrapper">
+    <div class="top-bar">
+      <div class="logo-area">
+        <div class="logo-text" id="homeLogo">AXEPEAK</div>
+        <div class="search-container">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
+          <div id="searchSuggestions" class="search-suggestions"></div>
+        </div>
+      </div>
+      <div class="header-buttons">
+        <a href="#" class="nav-link" id="shopNavLink">🛍️ SHOP</a>
+        <a href="#" class="nav-link" id="homeNavLink">🏠 HOME</a>
+        <button id="accountBtn" class="icon-btn">👤 Account</button>
+        <label class="theme-switch"><input type="checkbox" id="themeToggle"><span class="slider"></span></label>
+        <button id="cartButton" class="cart-btn">🛒 Cart <span id="cartCount" class="cart-count">0</span></button>
+      </div>
+    </div>
+
+    <div id="homePage" class="page-section active-page">
+      <div class="hero fade-up">
+        <div class="brand-name">AXEPEAK</div>
+        <div class="quote-line">LIFE'S JOURNEY IS FILLED WITH OBSTACLES</div>
+        <div class="quote-line">BUT WITH EVERY STEP YOU TAKE</div>
+        <div class="quote-line">YOU'RE MAKING A DIFFERENCE.</div>
+        <div class="peak-message">✦ REACH YOUR PEAK ✦</div>
+        <button class="shop-btn" id="heroShopBtn">SHOP NOW</button>
+      </div>
+
+      <div class="timeless-banner fade-up"><h2>TIMELESS</h2></div>
+      
+      <div class="lookbook-section fade-up">
+        <div class="lookbook-title">✦ THE AXEPEAK LOOKBOOK ✦</div>
+        <div class="lookbook-subtitle">Discover the art of timeless style — curated outfits for every journey</div>
+        <div class="lookbook-grid">
+          <div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Urban Explorer</h3><p>Classic Hoodie + Cargo Pants + Beanie</p><span class="lookbook-tag">Streetwear</span></div></div>
+          <div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1483985988355-9e9f3a5b9d9e?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Mountain Minimal</h3><p>Premium T-Shirt + Denim Jacket + Joggers</p><span class="lookbook-tag">Outdoor</span></div></div>
+          <div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Peak Performance</h3><p>Zip Hoodie + Track Pants + Cap</p><span class="lookbook-tag">Athleisure</span></div></div>
+          <div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Coastal Cruise</h3><p>Oxford Shirt + Chinos + Sunglasses</p><span class="lookbook-tag">Casual</span></div></div>
+          <div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>City Nights</h3><p>Leather Jacket + Classic Jeans + Boots</p><span class="lookbook-tag">Evening</span></div></div>
+          <div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Weekend Escape</h3><p>Flannel Shirt + Cargo Pants + Backpack</p><span class="lookbook-tag">Adventure</span></div></div>
+        </div>
+      </div>
+      
+      <div class="reviews-section fade-up">
+        <div class="featured-title">✦ CUSTOMER REVIEWS ✦</div>
+        <div class="reviews-grid">
+          <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Best hoodie I've ever bought. The quality is incredible."</div><div class="review-author">— Michael T.</div></div>
+          <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Timeless design and sustainable fabric. Worth every penny!"</div><div class="review-author">— Sarah J.</div></div>
+          <div class="review-card"><div class="review-stars">★★★★☆</div><div class="review-text">"Great shirt, soft material. Shipping was fast."</div><div class="review-author">— David L.</div></div>
+        </div>
+      </div>
+      
+      <div class="story-section fade-up">
+        <div class="featured-title">✦ OUR STORY ✦</div>
+        <div class="story-content"><p>AXEPEAK represents the climb toward your highest self. Born from the belief that every obstacle is an opportunity, we craft timeless apparel for those who refuse to settle.<br><br><strong>✦ REACH YOUR PEAK ✦</strong></p></div>
+      </div>
+      
+      <div class="follow-section fade-up">
+        <div class="featured-title">✨ FOLLOW OUR JOURNEY ✨</div>
+        <div class="social-links">
+          <a href="#" class="social-icon" id="instaLink"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon" id="twitterLink"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon" id="facebookLink"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon" id="tiktokLink"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <p style="margin-top: 20px;">@axpeak_official — Join the community</p>
+      </div>
+      
+      <div class="subscribe-section fade-up">
+        <div class="featured-title">SUBSCRIBE</div>
+        <form class="subscribe-form" id="subscribeForm">
+          <input type="email" id="subEmail" placeholder="Your email address" required>
+          <button type="submit">SUBSCRIBE →</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="shopPage" class="page-section">
+      <div class="hero" style="padding:30px 20px;">
+        <div class="brand-name" style="font-size:48px;">SHOP COLLECTION</div>
+        <p>Discover our complete range of timeless apparel</p>
+      </div>
+      <div class="timeless-banner"><h2>COMPLETE CATALOG</h2></div>
+      <div class="category-filters" id="shopCategoryFilters">
+        <button class="filter-btn active" data-cat="all">ALL</button>
+        <button class="filter-btn" data-cat="t-shirt">👕 T-SHIRTS</button>
+        <button class="filter-btn" data-cat="hoodie">🧥 HOODIES</button>
+        <button class="filter-btn" data-cat="pants">👖 PANTS</button>
+      </div>
+      <div class="products-grid" id="shopProductGrid"></div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-links"><a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a><a href="#">Privacy</a></div>
+      <div class="footer-social"><div class="social-links">
+        <a href="#" class="social-icon" id="footerInsta"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon" id="footerTwitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon" id="footerFacebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-icon" id="footerTiktok"><i class="fab fa-tiktok"></i></a>
+      </div></div>
+      <p>© 2025 AXEPEAK — Every step makes a difference.</p>
+      <div class="peak">✦ REACH YOUR PEAK ✦</div>
+    </div>
+  </div>
+</div>
+
+<div id="checkoutModal" class="modal"><div class="modal-content"><h2>Select Payment Method</h2><div class="payment-options"><div class="pay-method" data-method="Credit Card">💳 Credit Card</div><div class="pay-method" data-method="Apple Pay">🍎 Apple Pay</div><div class="pay-method" data-method="PayPal">💰 PayPal</div><div class="pay-method" data-method="Google Pay">📱 Google Pay</div><div class="pay-method" data-method="Cash on Delivery">💵 Cash on Delivery</div></div><button class="close-modal">Cancel</button></div></div>
+<div id="cartModal" class="modal"><div class="modal-content"><h2>Your Cart 🛒</h2><div id="cartItems"></div><div id="cartTotal" style="font-size:24px;margin:20px 0;">Total: $0</div><button id="checkoutBtn" class="modal-btn">Proceed to Checkout →</button><button class="close-modal">Close</button></div></div>
 
 <script>
+  // ========== CUSTOM CURSOR ==========
+  const cursor = document.getElementById('customCursor');
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .filter-btn, .nav-link, .icon-btn, .cart-btn, .shop-btn, .pay-method, .modal-btn, .close-modal, .social-icon, .lookbook-item, .product-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // ========== PARALLAX ==========
+  const parallaxMountain = document.getElementById('parallaxMountain');
+  const parallaxSun = document.getElementById('parallaxSun');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (parallaxMountain) parallaxMountain.style.transform = `translateY(${y * 0.08}px)`;
+    if (parallaxSun) parallaxSun.style.transform = `translateY(${y * 0.05}px)`;
+  });
+
   function createParticles() {
     const container = document.getElementById('particles');
-    for (let i = 0; i < 50; i++) {
-      const p = document.createElement('div');
-      p.classList.add('particle');
-      const size = Math.random() * 5 + 1;
-      p.style.width = size + 'px';
-      p.style.height = size + 'px';
+    for(let i = 0; i < 60; i++) {
+      let p = document.createElement('div'); p.classList.add('particle');
+      let size = Math.random() * 5 + 1;
+      p.style.width = size + 'px'; p.style.height = size + 'px';
       p.style.left = Math.random() * 100 + '%';
-      p.style.animationDuration = Math.random() * 15 + 8 + 's';
+      p.style.animationDuration = Math.random() * 15 + 10 + 's';
       p.style.animationDelay = Math.random() * 10 + 's';
-      p.style.opacity = Math.random() * 0.5 + 0.1;
       container.appendChild(p);
     }
   }
   createParticles();
 
-  const products = [
-    { cat: "t-shirt", name: "classic t-shirt", orig: 20, sale: 14, img: "https://cdn.pixabay.com/photo/2017/01/14/12/59/tshirt-1979270_640.jpg" },
-    { cat: "t-shirt", name: "premium t-shirt", orig: 25, sale: 17.50, img: "https://cdn.pixabay.com/photo/2018/12/06/12/03/women-s-t-shirt-3858942_640.jpg" },
-    { cat: "sweatpant", name: "classic sweatpant", orig: 25, sale: 17.50, img: "https://cdn.pixabay.com/photo/2016/11/19/15/32/pants-1839710_640.jpg" },
-    { cat: "sweatpant", name: "cargo sweatpant", orig: 32, sale: 22.40, img: "https://cdn.pixabay.com/photo/2016/11/23/13/17/pants-1852865_640.jpg" },
-    { cat: "hoodie", name: "classic hoodie", orig: 30, sale: 21, img: "https://cdn.pixabay.com/photo/2021/01/12/07/20/hoodie-5911254_640.jpg" },
-    { cat: "hoodie", name: "zip hoodie", orig: 35, sale: 24.50, img: "https://cdn.pixabay.com/photo/2022/03/03/02/43/hoodie-7045212_640.jpg" },
-    { cat: "shirt", name: "casual shirt", orig: 20, sale: 14, img: "https://cdn.pixabay.com/photo/2018/04/21/10/14/shirt-3339053_640.jpg" },
-    { cat: "shirt", name: "oxford shirt", orig: 35, sale: 24.50, img: "https://cdn.pixabay.com/photo/2017/05/13/17/33/shirt-2310159_640.jpg" },
-    { cat: "polo", name: "classic polo", orig: 20, sale: 14, img: "https://cdn.pixabay.com/photo/2016/08/21/19/29/polo-shirt-1611109_640.jpg" },
-    { cat: "polo", name: "premium polo", orig: 30, sale: 21, img: "https://cdn.pixabay.com/photo/2019/04/27/06/26/polo-shirt-4159324_640.jpg" },
-    { cat: "pants", name: "jeans", orig: 45, sale: 31.50, img: "https://cdn.pixabay.com/photo/2016/11/19/15/32/jeans-1839719_640.jpg" },
-    { cat: "pants", name: "cargo pants", orig: 45, sale: 31.50, img: "https://cdn.pixabay.com/photo/2016/11/23/13/17/cargo-pants-1852866_640.jpg" },
-    { cat: "pants", name: "chino pants", orig: 40, sale: 28, img: "https://cdn.pixabay.com/photo/2016/11/19/15/31/chinos-1839691_640.jpg" }
-  ];
-
-  function renderProductGrid(containerId, filterCat = "all") {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    let filtered = filterCat === "all" ? products : products.filter(p => p.cat === filterCat);
-    container.innerHTML = filtered.map((p, idx) => `<div class="product-card" data-cat="${p.cat}" data-name="${p.name}" data-price="${p.sale}" style="animation-delay: ${idx * 0.03}s">
-      <div class="sale-badge">-${Math.round((1 - p.sale/p.orig)*100)}%</div>
-      <img class="product-img" src="${p.img}" alt="${p.name}"><div class="product-title">${p.name}</div>
-      <div class="price-container"><span class="original-price">$${p.orig}</span><span class="product-price">$${p.sale}</span></div>
-      <button class="add-to-cart">ADD TO CART →</button></div>`).join('');
-    container.querySelectorAll('.add-to-cart').forEach(btn => {
-      const card = btn.closest('.product-card');
-      btn.addEventListener('click', () => addToCart(card.dataset.name, parseFloat(card.dataset.price)));
-    });
-  }
-
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('axpeak_theme') === 'light') { document.body.classList.add('light'); themeToggle.checked = true; }
-  themeToggle.addEventListener('change', () => {
-    if (themeToggle.checked) { document.body.classList.add('light'); localStorage.setItem('axpeak_theme', 'light'); }
-    else { document.body.classList.remove('light'); localStorage.setItem('axpeak_theme', 'dark'); }
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      document.getElementById('loadingOverlay').classList.add('fade-out');
+      document.getElementById('mainContent').classList.add('visible');
+      setTimeout(() => { document.getElementById('loadingOverlay').style.display = 'none'; }, 1200);
+    }, 2000);
   });
 
-  let currentUser = localStorage.getItem('axpeak_user') ? JSON.parse(localStorage.getItem('axpeak_user')) : null;
-  function updateAccountUI() {
-    const btn = document.getElementById('accountBtn');
-    if (currentUser) { btn.innerHTML = `👤 ${currentUser.name}`; btn.style.background = 'var(--gold)'; btn.style.color = '#0D1117'; }
-    else { btn.innerHTML = `👤 Account`; btn.style.background = ''; btn.style.color = ''; }
+  const fadeElements = document.querySelectorAll('.fade-up');
+  new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1 }).observe(fadeElements.length ? fadeElements[0] : null);
+  fadeElements.forEach(el => new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1 }).observe(el));
+
+  // Products with color swatches
+  const products = [
+    { id: "p1", cat: "t-shirt", name: "Classic T-Shirt", price: 14, orig: 20, img: "https://cdn.pixabay.com/photo/2017/01/14/12/59/tshirt-1979270_640.jpg", colors: ["black", "white", "navy"] },
+    { id: "p2", cat: "t-shirt", name: "Premium T-Shirt", price: 17.50, orig: 25, img: "https://cdn.pixabay.com/photo/2018/12/06/12/03/women-s-t-shirt-3858942_640.jpg", colors: ["black", "white", "beige"] },
+    { id: "p3", cat: "hoodie", name: "Classic Hoodie", price: 21, orig: 30, img: "https://cdn.pixabay.com/photo/2021/01/12/07/20/hoodie-5911254_640.jpg", colors: ["black", "grey", "navy"] },
+    { id: "p4", cat: "hoodie", name: "Zip Hoodie", price: 24.50, orig: 35, img: "https://cdn.pixabay.com/photo/2022/03/03/02/43/hoodie-7045212_640.jpg", colors: ["black", "burgundy", "olive"] },
+    { id: "p5", cat: "pants", name: "Cargo Pants", price: 31.50, orig: 45, img: "https://cdn.pixabay.com/photo/2016/11/23/13/17/cargo-pants-1852866_640.jpg", colors: ["black", "olive", "beige"] },
+    { id: "p6", cat: "pants", name: "Classic Jeans", price: 31.50, orig: 45, img: "https://cdn.pixabay.com/photo/2016/11/19/15/32/jeans-1839719_640.jpg", colors: ["blue", "black", "grey"] }
+  ];
+
+  function renderShopGrid(containerId, filterCat = "all") {
+    const container = document.getElementById(containerId);
+    if(!container) return;
+    let filtered = filterCat === "all" ? products : products.filter(p => p.cat === filterCat);
+    container.innerHTML = filtered.map(p => `
+      <div class="product-card" data-name="${p.name}" data-price="${p.price}">
+        <img class="product-img" src="${p.img}" alt="${p.name}">
+        <div class="product-title">${p.name}</div>
+        <div class="price-container"><span class="original-price">$${p.orig}</span><span class="product-price">$${p.price}</span></div>
+        <div class="color-swatches">
+          ${p.colors.map(c => `<div class="color-swatch ${c}" data-color="${c}" onclick="event.stopPropagation(); selectColor(this, '${p.name}', '${c}')"></div>`).join('')}
+        </div>
+        <button class="modal-btn" style="padding:8px; font-size:14px;" onclick="addToCart('${p.name}', ${p.price})">ADD TO CART →</button>
+      </div>`).join('');
   }
-  function showAccountModal(mode) {
-    const modal = document.getElementById('accountModal');
-    const content = document.getElementById('accountModalContent');
-    if (mode === 'login') content.innerHTML = `<h2>Sign In</h2><input type="email" id="loginEmail" class="modal-input" placeholder="Email"><input type="password" id="loginPassword" class="modal-input" placeholder="Password"><div id="loginError" class="error-msg"></div><button id="doLogin" class="modal-btn">Sign In →</button><div class="switch-modal">Don't have an account? <span id="switchToSignup">Create one</span></div><button class="close-modal">Close</button>`;
-    else content.innerHTML = `<h2>Create Account</h2><input type="text" id="signupName" class="modal-input" placeholder="Full Name"><input type="email" id="signupEmail" class="modal-input" placeholder="Email"><input type="password" id="signupPassword" class="modal-input" placeholder="Password (min 4 chars)"><div id="signupError" class="error-msg"></div><button id="doSignup" class="modal-btn">Create Account →</button><div class="switch-modal">Already have an account? <span id="switchToLogin">Sign In</span></div><button class="close-modal">Close</button>`;
-    modal.classList.add('active');
-    content.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', () => modal.classList.remove('active')));
-    content.querySelector('#switchToSignup')?.addEventListener('click', () => { modal.classList.remove('active'); showAccountModal('signup'); });
-    content.querySelector('#switchToLogin')?.addEventListener('click', () => { modal.classList.remove('active'); showAccountModal('login'); });
-    if (mode === 'login') document.getElementById('doLogin')?.addEventListener('click', () => {
-      const email = document.getElementById('loginEmail').value.trim(), password = document.getElementById('loginPassword').value;
-      const users = JSON.parse(localStorage.getItem('axpeak_users') || '[]');
-      const user = users.find(u => u.email === email && u.password === password);
-      if (user) { currentUser = { name: user.name, email: user.email }; localStorage.setItem('axpeak_user', JSON.stringify(currentUser)); updateAccountUI(); modal.classList.remove('active'); alert(`Welcome back, ${user.name}!`); }
-      else document.getElementById('loginError').innerText = 'Invalid email or password.';
-    });
-    else document.getElementById('doSignup')?.addEventListener('click', () => {
-      const name = document.getElementById('signupName').value.trim(), email = document.getElementById('signupEmail').value.trim(), password = document.getElementById('signupPassword').value;
-      if (!name || !email || !password) { document.getElementById('signupError').innerText = 'Please fill all fields.'; return; }
-      if (password.length < 4) { document.getElementById('signupError').innerText = 'Password must be at least 4 characters.'; return; }
-      const users = JSON.parse(localStorage.getItem('axpeak_users') || '[]');
-      if (users.find(u => u.email === email)) { document.getElementById('signupError').innerText = 'Email already registered.'; return; }
-      users.push({ name, email, password }); localStorage.setItem('axpeak_users', JSON.stringify(users));
-      currentUser = { name, email }; localStorage.setItem('axpeak_user', JSON.stringify(currentUser)); updateAccountUI(); modal.classList.remove('active'); alert(`Account created! Welcome, ${name}!`);
-    });
-  }
-  document.getElementById('accountBtn').addEventListener('click', () => showAccountModal('login'));
-  
+
+  window.selectColor = function(element, productName, color) {
+    const swatches = element.parentElement.querySelectorAll('.color-swatch');
+    swatches.forEach(s => s.classList.remove('selected'));
+    element.classList.add('selected');
+    alert(`✨ ${productName} - ${color.toUpperCase()} selected`);
+  };
+
+  renderShopGrid('shopProductGrid', 'all');
+
+  // Social Links
+  ['instaLink', 'twitterLink', 'facebookLink', 'tiktokLink', 'footerInsta', 'footerTwitter', 'footerFacebook', 'footerTiktok'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('click', (e) => { e.preventDefault(); let platform = id.includes('insta') ? 'Instagram' : (id.includes('twitter') ? 'Twitter' : (id.includes('facebook') ? 'Facebook' : 'TikTok')); alert(`📱 Follow AXEPEAK on ${platform}!`); });
+  });
+
+  const themeToggle = document.getElementById('themeToggle');
+  if(localStorage.getItem('axpeak_theme') === 'light') { document.body.classList.add('light'); themeToggle.checked = true; }
+  themeToggle.addEventListener('change', () => { if(themeToggle.checked){ document.body.classList.add('light'); localStorage.setItem('axpeak_theme','light'); } else { document.body.classList.remove('light'); localStorage.setItem('axpeak_theme','dark'); } });
+
   let cart = JSON.parse(localStorage.getItem('axpeak_cart') || '[]');
   function saveCart() { localStorage.setItem('axpeak_cart', JSON.stringify(cart)); updateCartUI(); }
   function updateCartUI() {
-    document.getElementById('cartCount').innerText = cart.reduce((s, i) => s + i.qty, 0);
-    const cartDiv = document.getElementById('cartItems');
-    if (!cartDiv) return;
-    if (cart.length === 0) { cartDiv.innerHTML = '<p style="text-align:center; padding:20px;">Your cart is empty. ✨</p>'; document.getElementById('cartTotal').innerText = 'Total: $0'; return; }
-    let total = 0;
-    cartDiv.innerHTML = '';
-    cart.forEach((item, idx) => { const itemTotal = item.price * item.qty; total += itemTotal; cartDiv.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border);"><div><strong>${item.name}</strong><br>$${item.price} x ${item.qty}</div><div>$${itemTotal.toFixed(2)} <button class="remove-item" data-idx="${idx}" style="background:none; border:none; color:var(--sale); cursor:pointer;">🗑️</button></div></div>`; });
-    document.getElementById('cartTotal').innerText = `Total: $${total.toFixed(2)}`;
-    document.querySelectorAll('.remove-item').forEach(btn => btn.addEventListener('click', (e) => { cart.splice(parseInt(btn.dataset.idx), 1); saveCart(); updateCartUI(); }));
+    document.getElementById('cartCount').innerText = cart.reduce((s,i)=>s+i.qty,0);
+    const cd = document.getElementById('cartItems');
+    if(cd){
+      if(cart.length===0){ cd.innerHTML='<p>Your cart is empty.</p>'; document.getElementById('cartTotal').innerText='Total: $0'; return; }
+      let total=0; cd.innerHTML='';
+      cart.forEach((item,idx)=>{ const it=item.price*item.qty; total+=it; cd.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:10px 0"><div><strong>${item.name}</strong><br>$${item.price} x ${item.qty}</div><div>$${it.toFixed(2)} <button class="remove-item" data-idx="${idx}" style="background:none;border:none;color:red;cursor:pointer;">🗑️</button></div></div>`; });
+      document.getElementById('cartTotal').innerText=`Total: $${total.toFixed(2)}`;
+      document.querySelectorAll('.remove-item').forEach(btn=>btn.addEventListener('click',()=>{ cart.splice(parseInt(btn.dataset.idx),1); saveCart(); updateCartUI(); }));
+    }
   }
-  function addToCart(name, price) { const existing = cart.find(i => i.name === name); if (existing) existing.qty++; else cart.push({ name, price, qty: 1 }); saveCart(); alert(`✨ ${name} added to cart!`); }
-  
+  window.addToCart = function(name, price) { const existing=cart.find(i=>i.name===name); if(existing) existing.qty++; else cart.push({name,price,qty:1}); saveCart(); alert(`✨ ${name} added to cart!`); }
+  function processPayment(method) {
+    if(cart.length===0){ alert('Cart is empty'); return; }
+    const total = cart.reduce((s,i)=>s+(i.price*i.qty),0);
+    alert(`✅ Payment via ${method} successful!\nTotal: $${total.toFixed(2)}\nThank you for shopping at AXEPEAK!\n\nREACH YOUR PEAK!`);
+    cart = []; saveCart(); document.getElementById('checkoutModal').classList.remove('active'); document.getElementById('cartModal').classList.remove('active');
+  }
+
   const homePage = document.getElementById('homePage'), shopPage = document.getElementById('shopPage');
-  function showHomePage() { homePage.classList.add('active-page'); shopPage.classList.remove('active-page'); renderProductGrid('productGrid', 'all'); attachFilters('categoryFilters', 'productGrid'); }
-  function showShopPage() { homePage.classList.remove('active-page'); shopPage.classList.add('active-page'); renderProductGrid('shopProductGrid', 'all'); attachFilters('shopCategoryFilters', 'shopProductGrid'); }
-  function attachFilters(filterId, gridId) { document.querySelectorAll(`#${filterId} .filter-btn`).forEach(btn => { btn.removeEventListener('click', () => {}); btn.addEventListener('click', () => { document.querySelectorAll(`#${filterId} .filter-btn`).forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderProductGrid(gridId, btn.dataset.cat); attachFilters(filterId, gridId); }); }); }
-  document.getElementById('shopNavLink').addEventListener('click', (e) => { e.preventDefault(); showShopPage(); });
-  document.getElementById('homeNavLink').addEventListener('click', (e) => { e.preventDefault(); showHomePage(); });
-  document.getElementById('heroShopBtn').addEventListener('click', () => showShopPage());
-  document.getElementById('homeLogo').addEventListener('click', () => showHomePage());
-  
-  document.getElementById('searchInput').addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase();
-    document.querySelectorAll(`#${homePage.classList.contains('active-page') ? 'productGrid' : 'shopProductGrid'} .product-card`).forEach(card => { card.style.display = card.dataset.name.toLowerCase().includes(term) ? 'block' : 'none'; });
+  function showHomePage() { homePage.classList.add('active-page'); shopPage.classList.remove('active-page'); }
+  function showShopPage() { homePage.classList.remove('active-page'); shopPage.classList.add('active-page'); renderShopGrid('shopProductGrid', 'all'); attachFilters(); }
+  function attachFilters() { document.querySelectorAll('#shopCategoryFilters .filter-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('#shopCategoryFilters .filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderShopGrid('shopProductGrid', btn.dataset.cat); }); }); }
+  document.getElementById('shopNavLink').addEventListener('click', e=>{e.preventDefault(); showShopPage();});
+  document.getElementById('homeNavLink').addEventListener('click', e=>{e.preventDefault(); showHomePage();});
+  document.getElementById('heroShopBtn').addEventListener('click',()=>showShopPage());
+  document.getElementById('homeLogo').addEventListener('click',()=>showHomePage());
+  attachFilters();
+
+  // Search suggestions
+  const searchInput = document.getElementById('searchInput');
+  const suggestionsBox = document.getElementById('searchSuggestions');
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    if (query.length === 0) { suggestionsBox.classList.remove('active'); return; }
+    const matches = products.filter(p => p.name.toLowerCase().includes(query));
+    if (matches.length === 0) { suggestionsBox.innerHTML = '<div class="no-results">No matching products found</div>'; suggestionsBox.classList.add('active'); return; }
+    suggestionsBox.innerHTML = matches.map(p => `<div class="suggestion-item" data-name="${p.name}" data-price="${p.price}" data-img="${p.img}"><img class="suggestion-img" src="${p.img}"><div><div class="suggestion-name">${p.name}</div><div class="suggestion-price">$${p.price}</div></div></div>`).join('');
+    suggestionsBox.classList.add('active');
+    document.querySelectorAll('.suggestion-item').forEach(item => {
+      item.addEventListener('click', () => { addToCart(item.dataset.name, parseFloat(item.dataset.price)); searchInput.value = ''; suggestionsBox.classList.remove('active'); });
+    });
   });
+  document.addEventListener('click', (e) => { if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) suggestionsBox.classList.remove('active'); });
+  searchInput.addEventListener('input', (e) => { const term = e.target.value.toLowerCase(); document.querySelectorAll('#shopProductGrid .product-card').forEach(card => { card.style.display = card.dataset.name.toLowerCase().includes(term) ? 'block' : 'none'; }); });
   
-  const modal = document.getElementById('cartModal');
-  document.getElementById('cartButton').addEventListener('click', () => { updateCartUI(); modal.classList.add('active'); });
-  document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', () => modal.classList.remove('active')));
-  function processPayment(method) { if (cart.length === 0) { alert('Cart is empty'); return; } const total = cart.reduce((s, i) => s + (i.price * i.qty), 0); alert(`✅ Payment via ${method} successful!\nTotal: $${total.toFixed(2)}\nThank you for shopping at AXEPEAK.\n\nREACH YOUR PEAK!`); cart = []; saveCart(); modal.classList.remove('active'); }
-  document.getElementById('payCard')?.addEventListener('click', () => processPayment('Credit Card'));
-  document.getElementById('payApple')?.addEventListener('click', () => processPayment('Apple Pay'));
-  document.getElementById('payPaypal')?.addEventListener('click', () => processPayment('PayPal'));
-  document.getElementById('instagramLink')?.addEventListener('click', (e) => { e.preventDefault(); alert('📱✨ Follow @axpeak_official on Instagram!\n\nJoin 42.5K+ followers for exclusive drops and style inspiration!'); });
-  document.getElementById('subscribeForm').addEventListener('submit', (e) => { e.preventDefault(); const email = document.getElementById('subEmail').value.trim(); if (email && email.includes('@') && email.includes('.')) { alert(`✅ Subscribed with ${email}! Thank you for joining AXEPEAK.`); document.getElementById('subEmail').value = ''; } else alert('Please enter a valid email address.'); });
-  
-  renderProductGrid('productGrid', 'all'); renderProductGrid('shopProductGrid', 'all'); attachFilters('categoryFilters', 'productGrid'); attachFilters('shopCategoryFilters', 'shopProductGrid'); updateAccountUI(); updateCartUI();
+  const cartModal = document.getElementById('cartModal');
+  document.getElementById('cartButton').addEventListener('click', () => { updateCartUI(); cartModal.classList.add('active'); });
+  document.getElementById('checkoutBtn').addEventListener('click', () => { cartModal.classList.remove('active'); document.getElementById('checkoutModal').classList.add('active'); });
+  document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', () => { cartModal.classList.remove('active'); document.getElementById('checkoutModal').classList.remove('active'); }));
+  document.querySelectorAll('.pay-method').forEach(btn => btn.addEventListener('click', () => { processPayment(btn.dataset.method); }));
+  document.getElementById('subscribeForm').addEventListener('submit', e=>{ e.preventDefault(); const email=document.getElementById('subEmail').value.trim(); if(email&&email.includes('@')) alert(`✅ Subscribed with ${email}!`); else alert('Please enter a valid email.'); });
+  updateCartUI();
 </script>
 </body>
 </html>
