@@ -44,6 +44,58 @@
       transition: width 0.1s ease;
     }
 
+    /* ========== PREMIUM MICRO-INTERACTIONS ========== */
+    button, .filter-btn, .nav-link, .icon-btn, .cart-btn, .shop-btn, .payment-option, .modal-btn, .close-modal, .social-icon, .wishlist-btn, .ai-btn, .season-selector, .add-to-cart, .notify-btn {
+      transition: transform 0.15s cubic-bezier(0.2, 0.9, 0.4, 1.1), background 0.2s ease, box-shadow 0.2s ease;
+    }
+    button:active, .filter-btn:active, .nav-link:active, .icon-btn:active, .cart-btn:active, .shop-btn:active, .payment-option:active, .modal-btn:active, .notify-btn:active {
+      transform: scale(0.96);
+    }
+    
+    .social-icon i, .nav-link i, .cart-btn i, .wishlist-btn i, .shop-btn i {
+      transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    .social-icon:hover i { transform: translateY(-3px) scale(1.1); }
+    .nav-link:hover i { transform: translateX(3px); }
+    .cart-btn:hover i { transform: rotate(5deg); }
+    .wishlist-btn:hover i { transform: scale(1.15); }
+    .shop-btn:hover i { transform: translateX(5px); }
+    
+    .filter-btn:hover, .nav-link:hover, .icon-btn:hover, .shop-btn:hover, .payment-option:hover, .product-card, .ai-btn:hover, .notify-btn:hover {
+      box-shadow: 0 0 18px rgba(255,200,110,0.4);
+    }
+    
+    .product-card {
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), border-color 0.2s, box-shadow 0.3s;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.4);
+      border-color: var(--gold);
+    }
+    
+    .announcement-bar {
+      animation: subtleGlow 3s infinite;
+    }
+    @keyframes subtleGlow {
+      0%, 100% { text-shadow: 0 0 0px rgba(255,200,110,0); }
+      50% { text-shadow: 0 0 4px rgba(255,200,110,0.5); }
+    }
+    
+    .countdown-item {
+      transition: all 0.3s ease;
+    }
+    .countdown-item:hover {
+      transform: translateY(-5px);
+      border-color: #FFC86E;
+      box-shadow: 0 15px 30px rgba(255,200,110,0.15);
+    }
+    
+    .search-input:focus, .notify-input:focus, .newsletter-form input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(255,200,110,0.3);
+    }
+
     /* ========== 3D SIGNATURE EXIT ANIMATION ========== */
     .exit-container {
       position: fixed;
@@ -65,7 +117,6 @@
       visibility: visible;
     }
     
-    /* 3D Mountain Scene */
     .exit-mountain-scene {
       position: relative;
       width: 100%;
@@ -86,31 +137,12 @@
     }
     
     @keyframes exitMountainRise {
-      0% {
-        transform: translateX(-50%) translateY(100%) rotateX(0deg) scale(1);
-        opacity: 0;
-      }
-      30% {
-        transform: translateX(-50%) translateY(20%) rotateX(0deg) scale(1.2);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(-50%) translateY(-30%) rotateX(25deg) scale(1.5);
-        opacity: 0;
-      }
+      0% { transform: translateX(-50%) translateY(100%) rotateX(0deg) scale(1); opacity: 0; }
+      30% { transform: translateX(-50%) translateY(20%) rotateX(0deg) scale(1.2); opacity: 1; }
+      100% { transform: translateX(-50%) translateY(-30%) rotateX(25deg) scale(1.5); opacity: 0; }
     }
     
-    .exit-mountain-svg {
-      width: 100%;
-      height: auto;
-      filter: drop-shadow(0 0 20px rgba(255,200,110,0.3));
-    }
-    
-    .exit-mountain-svg path {
-      transition: all 0.3s ease;
-    }
-    
-    /* Floating particles during exit */
+    .exit-mountain-svg { width: 100%; height: auto; filter: drop-shadow(0 0 20px rgba(255,200,110,0.3)); }
     .exit-particle-3d {
       position: fixed;
       width: 6px;
@@ -124,17 +156,10 @@
       box-shadow: 0 0 10px rgba(255,200,110,0.5);
     }
     @keyframes exitParticleFloat3D {
-      0% {
-        opacity: 1;
-        transform: translateY(0) translateX(0) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(-200px) translateX(50px) scale(0);
-      }
+      0% { opacity: 1; transform: translateY(0) translateX(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-200px) translateX(50px) scale(0); }
     }
     
-    /* Dark overlay with gradient fade */
     .exit-dark-overlay {
       position: fixed;
       top: 0;
@@ -147,39 +172,8 @@
       opacity: 0;
       transition: opacity 1.2s ease;
     }
-    .exit-dark-overlay.active {
-      opacity: 1;
-    }
+    .exit-dark-overlay.active { opacity: 1; }
     
-    /* Cinematic light sweep */
-    .exit-light-sweep {
-      position: fixed;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,200,110,0.15), transparent);
-      pointer-events: none;
-      z-index: 10003;
-      animation: lightSweep 0.8s ease-out forwards;
-      opacity: 0;
-    }
-    @keyframes lightSweep {
-      0% {
-        left: -100%;
-        opacity: 0;
-      }
-      50% {
-        left: 100%;
-        opacity: 1;
-      }
-      100% {
-        left: 200%;
-        opacity: 0;
-      }
-    }
-    
-    /* Farewell text 3D */
     .exit-farewell-3d {
       position: fixed;
       top: 35%;
@@ -269,32 +263,6 @@
       will-change: transform;
     }
 
-    /* ========== PREMIUM MICRO-INTERACTIONS ========== */
-    button, .filter-btn, .nav-link, .icon-btn, .cart-btn, .shop-btn, .payment-option, .modal-btn, .close-modal, .social-icon, .wishlist-btn, .ai-btn, .season-selector, .add-to-cart {
-      transition: transform 0.15s cubic-bezier(0.2, 0.9, 0.4, 1.1), background 0.2s ease, box-shadow 0.2s ease;
-    }
-    button:active, .filter-btn:active, .nav-link:active, .icon-btn:active, .cart-btn:active, .shop-btn:active, .payment-option:active, .modal-btn:active {
-      transform: scale(0.96);
-    }
-    .social-icon i, .nav-link i, .cart-btn i, .wishlist-btn i {
-      transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    }
-    .social-icon:hover i { transform: translateY(-3px) scale(1.1); }
-    .nav-link:hover i { transform: translateX(3px); }
-    .cart-btn:hover i { transform: rotate(5deg); }
-    .wishlist-btn:hover i { transform: scale(1.15); }
-    .filter-btn:hover, .nav-link:hover, .icon-btn:hover, .shop-btn:hover, .payment-option:hover {
-      box-shadow: 0 0 18px rgba(255,200,110,0.4);
-      text-shadow: 0 0 4px rgba(255,200,110,0.3);
-    }
-    .announcement-bar {
-      animation: subtleGlow 3s infinite;
-    }
-    @keyframes subtleGlow {
-      0%, 100% { text-shadow: 0 0 0px rgba(255,200,110,0); }
-      50% { text-shadow: 0 0 4px rgba(255,200,110,0.5); }
-    }
-
     /* ========== LOADING ANIMATION ========== */
     .loading-overlay {
       position: fixed;
@@ -348,7 +316,7 @@
       overflow-x: hidden;
       transition: background 0.5s ease;
     }
-    a, button, .filter-btn, .nav-link, .icon-btn, .cart-btn, .shop-btn, .payment-option, .modal-btn, .close-modal, .social-icon, .wishlist-btn, .ai-btn, .season-selector, .add-to-cart {
+    a, button, .filter-btn, .nav-link, .icon-btn, .cart-btn, .shop-btn, .payment-option, .modal-btn, .close-modal, .social-icon, .wishlist-btn, .ai-btn, .season-selector, .add-to-cart, .notify-btn {
       cursor: none;
     }
 
@@ -483,7 +451,7 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .season-selector:hover { background: var(--gold); color: #0D1117; transform: translateY(-2px); }
+    .season-selector:hover { background: var(--gold); color: #0D1117; transform: translateY(-2px); box-shadow: 0 0 12px rgba(255,200,110,0.3); }
     .nav-link, .icon-btn, .cart-btn {
       background: rgba(255,200,110,0.15);
       border: 1px solid var(--border);
@@ -508,8 +476,33 @@
     .brand-name { font-size: 72px; font-weight: 900; color: var(--gold); text-shadow: 4px 4px 0 #583A10; margin-bottom: 20px; animation: glowPulse 3s infinite; }
     @keyframes glowPulse { 0%,100% { text-shadow: 4px 4px 0 #583A10, 0 0 8px rgba(255,200,110,0.3); } 50% { text-shadow: 4px 4px 0 #583A10, 0 0 20px rgba(255,200,110,0.6); } }
     .quote-line { font-size: 22px; font-weight: 600; text-transform: uppercase; margin: 5px 0; }
-    .peak-message { margin-top: 25px; font-size: 28px; font-weight: 800; letter-spacing: 4px; color: var(--gold); animation: pulse 2s infinite; }
-    @keyframes pulse { 50% { opacity: 0.7; transform: scale(1.02); } }
+    .slogan-rotator {
+      min-height: 80px;
+      margin-top: 15px;
+    }
+    .dynamic-slogan {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      display: inline-block;
+      background: linear-gradient(135deg, #FFE6B0, #FFC86E);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .dynamic-slogan.fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    .dynamic-slogan.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .peak-message { margin-top: 25px; font-size: 20px; font-weight: 500; letter-spacing: 2px; color: var(--text-secondary); }
     .shop-btn { display: inline-block; margin-top: 30px; background: var(--gold); color: #0D1117; padding: 12px 40px; border-radius: 40px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
     .shop-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,200,110,0.3); }
 
@@ -539,6 +532,196 @@
     .why-icon { font-size: 48px; color: var(--gold); margin-bottom: 20px; transition: transform 0.2s; }
     .why-card:hover .why-icon { transform: scale(1.05); }
     
+    /* ========== LUXURY EXCLUSIVE DROP COUNTDOWN SECTION ========== */
+    .exclusive-drop {
+      margin: 60px 20px;
+      padding: 70px 30px;
+      background: linear-gradient(135deg, rgba(255,200,110,0.08) 0%, rgba(20, 25, 35, 0.9) 100%);
+      border-radius: 60px;
+      border: 1px solid var(--gold);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 45px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,200,110,0.2);
+    }
+    .exclusive-drop::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,200,110,0.08) 0%, transparent 70%);
+      animation: rotateGlow 25s linear infinite;
+    }
+    @keyframes rotateGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .drop-badge {
+      display: inline-block;
+      background: rgba(255,200,110,0.2);
+      backdrop-filter: blur(12px);
+      padding: 8px 28px;
+      border-radius: 60px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: #FFC86E;
+      margin-bottom: 25px;
+      border: 1px solid rgba(255,200,110,0.5);
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 0 15px rgba(255,200,110,0.3);
+    }
+    .drop-title {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #FFFFFF 15%, #FFC86E 50%, #E8A84A 85%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+    }
+    .drop-sub {
+      font-size: 18px;
+      color: #E0D6C8;
+      max-width: 550px;
+      margin: 0 auto 30px;
+      position: relative;
+      z-index: 2;
+      font-weight: 500;
+    }
+    .countdown-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin: 40px 0 45px;
+      position: relative;
+      z-index: 2;
+    }
+    .countdown-item {
+      background: rgba(10, 15, 13, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,200,110,0.5);
+      border-radius: 32px;
+      padding: 25px 30px;
+      min-width: 130px;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .countdown-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255,200,110,0.1) 0%, transparent 80%);
+      pointer-events: none;
+    }
+    .countdown-item:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: #FFC86E;
+      box-shadow: 0 25px 40px rgba(255,200,110,0.25);
+    }
+    .countdown-number {
+      font-size: 68px;
+      font-weight: 900;
+      color: #FFC86E;
+      line-height: 1;
+      font-feature-settings: "tnum";
+      text-shadow: 0 0 12px rgba(255,200,110,0.6);
+      letter-spacing: 4px;
+    }
+    .countdown-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-weight: 700;
+      margin-top: 12px;
+      color: #E0D6C8;
+    }
+    .mountain-divider {
+      width: 120px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #FFC86E, #E8A84A, #FFC86E, transparent);
+      margin: 20px auto 30px;
+      border-radius: 3px;
+    }
+    .notify-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      max-width: 520px;
+      margin: 20px auto 0;
+      position: relative;
+      z-index: 2;
+    }
+    .notify-input {
+      flex: 1;
+      background: rgba(20, 28, 24, 0.9);
+      border: 1px solid rgba(255,200,110,0.4);
+      border-radius: 60px;
+      padding: 15px 26px;
+      font-size: 15px;
+      color: #F0E6D0;
+      outline: none;
+      transition: 0.25s;
+      font-weight: 500;
+      backdrop-filter: blur(4px);
+    }
+    .notify-input:focus {
+      border-color: #FFC86E;
+      box-shadow: 0 0 20px rgba(255,200,110,0.4);
+      background: rgba(20, 28, 24, 1);
+    }
+    .notify-btn {
+      background: linear-gradient(135deg, #FFC86E 0%, #E8A84A 100%);
+      border: none;
+      border-radius: 60px;
+      padding: 15px 38px;
+      font-weight: 800;
+      color: #0A0F0D;
+      cursor: pointer;
+      transition: 0.25s;
+      letter-spacing: 1.5px;
+      font-size: 15px;
+      box-shadow: 0 5px 15px rgba(255,200,110,0.3);
+    }
+    .notify-btn:hover {
+      background: linear-gradient(135deg, #FFD88E 0%, #FFB84A 100%);
+      transform: scale(1.03);
+      box-shadow: 0 10px 25px rgba(255,200,110,0.5);
+    }
+    .limited-edition {
+      margin-top: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255,200,110,0.12);
+      border-radius: 60px;
+      padding: 12px 32px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFC86E;
+      position: relative;
+      z-index: 2;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,200,110,0.3);
+    }
+    .limited-edition i {
+      font-size: 14px;
+    }
+
     .lookbook-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 35px; }
     .lookbook-item { position: relative; border-radius: 28px; overflow: hidden; cursor: pointer; transition: all 0.4s; }
     .lookbook-item:hover { transform: translateY(-12px); box-shadow: 0 25px 45px rgba(0,0,0,0.3); }
@@ -660,18 +843,8 @@
     .wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin: 40px 0; }
     .empty-wishlist { text-align: center; padding: 60px; color: var(--text-secondary); }
     .wishlist-item { background: var(--card-bg); border-radius: 28px; padding: 20px; text-align: center; border: 1px solid var(--border); position: relative; transition: all 0.3s; }
+    .remove-wishlist { background: rgba(255,0,0,0.2); border: none; border-radius: 40px; cursor: pointer; padding: 5px 12px; margin-bottom: 10px; color: var(--gold); font-size: 12px; }
     .wishlist-item:hover { transform: translateY(-5px); border-color: var(--gold); }
-    .color-swatches { display: flex; justify-content: center; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
-    .color-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; }
-    .color-swatch:hover { transform: scale(1.15); }
-    .color-swatch.selected { border-color: var(--gold); transform: scale(1.1); box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--gold); }
-    .color-swatch.black { background-color: #1a1a1a; }
-    .color-swatch.white { background-color: #f5f5f5; border: 1px solid #ddd; }
-    .color-swatch.navy { background-color: #1B2A4A; }
-    .color-swatch.grey { background-color: #6B6B6B; }
-    .color-swatch.olive { background-color: #5B6E3E; }
-    .color-swatch.burgundy { background-color: #6E2C2C; }
-    .color-swatch.beige { background-color: #D4C4A8; }
     .wishlist-btn {
       position: absolute;
       top: 15px;
@@ -733,12 +906,17 @@
     @media (max-width: 700px) {
       .brand-name { font-size: 44px; }
       .quote-line { font-size: 16px; }
+      .dynamic-slogan { font-size: 20px; }
       .top-bar { flex-direction: column; }
       .manifesto-text { font-size: 28px; }
       .lookbook-grid { grid-template-columns: 1fr; }
       .custom-cursor { display: none; }
       body { cursor: auto; }
       .exit-farewell-3d h2 { font-size: 28px; letter-spacing: 6px; }
+      .drop-title { font-size: 32px; letter-spacing: 4px; }
+      .countdown-number { font-size: 42px; }
+      .countdown-item { padding: 18px 20px; min-width: 90px; }
+      .exclusive-drop { margin: 40px 15px; padding: 50px 20px; }
     }
   </style>
 </head>
@@ -757,10 +935,6 @@
             <stop offset="0%" style="stop-color:#FFC86E;stop-opacity:0.8" />
             <stop offset="100%" style="stop-color:#1A1F2E;stop-opacity:1" />
           </linearGradient>
-          <linearGradient id="exitSnowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.9" />
-            <stop offset="100%" style="stop-color:#FFC86E;stop-opacity:0.5" />
-          </linearGradient>
           <filter id="exitGlow">
             <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
             <feMerge>
@@ -769,20 +943,11 @@
             </feMerge>
           </filter>
         </defs>
-        <!-- Main Mountain Peak -->
         <path d="M200,550 L350,180 L500,550 Z" fill="url(#exitMountainGrad)" filter="url(#exitGlow)"/>
-        <!-- Left Mountain -->
         <path d="M50,550 L180,250 L310,550 Z" fill="#2A3642" opacity="0.7"/>
-        <!-- Right Mountain -->
         <path d="M500,550 L630,280 L760,550 Z" fill="#2A3642" opacity="0.7"/>
-        <!-- Snow Cap -->
-        <path d="M350,180 L375,220 L325,220 Z" fill="url(#exitSnowGrad)"/>
-        <!-- Stars -->
         <circle cx="150" cy="120" r="2" fill="#FFC86E" opacity="0.8"/>
         <circle cx="650" cy="100" r="2.5" fill="#FFC86E" opacity="0.7"/>
-        <circle cx="400" cy="80" r="1.5" fill="#FFC86E" opacity="0.9"/>
-        <circle cx="250" cy="60" r="1.8" fill="#FFC86E" opacity="0.6"/>
-        <circle cx="580" cy="70" r="2" fill="#FFC86E" opacity="0.8"/>
       </svg>
     </div>
   </div>
@@ -811,8 +976,6 @@
         <path d="M0,400L60,380C120,360,240,320,360,300C480,280,600,280,720,290C840,300,960,320,1080,310C1200,300,1320,280,1380,270L1440,260L1440,500L1380,500C1320,500,1200,500,1080,500C960,500,840,500,720,500C600,500,480,500,360,500C240,500,120,500,60,500L0,500Z"></path>
         <path d="M0,380L60,350C120,320,240,260,340,230C440,200,520,220,600,250C680,280,760,310,840,300C920,290,1000,260,1100,250C1200,240,1320,260,1380,270L1440,280L1440,500L1380,500C1320,500,1200,500,1080,500C960,500,840,500,720,500C600,500,480,500,360,500C240,500,120,500,60,500L0,500Z"></path>
         <path d="M0,400L120,370C240,340,360,300,480,220C540,180,580,140,620,100C660,60,680,30,700,10C710,2,720,0,730,5C740,12,750,30,760,55C780,90,800,130,840,180C900,250,960,290,1020,320C1080,350,1200,380,1320,395L1440,400L1440,500L1320,500C1200,500,1080,500,1020,500C960,500,900,500,840,500C780,500,720,500,660,500C600,500,540,500,480,500C360,500,240,500,120,500L0,500Z"></path>
-        <path d="M660,80C672,60,688,45,700,12C710,2,720,0,730,5C740,12,745,25,750,40C740,35,720,38,700,50C680,62,670,72,660,80Z"></path>
-        <path d="M0,450L80,420C160,390,320,350,480,370C640,390,800,430,960,420C1120,410,1280,380,1360,370L1440,360L1440,500L1360,500C1280,500,1120,500,960,500C800,500,640,500,480,500C320,500,160,500,80,500L0,500Z"></path>
       </svg>
     </div>
   </div>
@@ -826,13 +989,14 @@
   <div class="announcement-bar">✧ FREE WORLDWIDE SHIPPING ON ORDERS OVER $100 ✧</div>
   
   <div class="wrapper">
+    <!-- Top Bar -->
     <div class="top-bar">
       <div class="logo-area">
         <div class="logo-text" id="homeLogo">AXEPEAK</div>
         <div class="search-container">
           <span class="search-icon">🔍</span>
           <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
-          <div id="searchSuggestions" class="search-suggestions"></div>
+          <div id="searchSuggestions" style="position:absolute; background:var(--modal-bg); border-radius:20px; width:100%; z-index:200; top:45px; left:0; display:none;"></div>
         </div>
       </div>
       <div class="header-buttons">
@@ -840,271 +1004,162 @@
         <a href="#" class="nav-link" id="shopNavLink">🛍️ SHOP</a>
         <a href="#" class="nav-link" id="wishlistNavLink">❤️ WISHLIST</a>
         <a href="#" class="nav-link" id="homeNavLink">🏠 HOME</a>
-        <button id="accountBtn" class="icon-btn">👤 Account</button>
         <label class="theme-switch"><input type="checkbox" id="themeToggle"><span class="slider"></span></label>
         <button id="cartButton" class="cart-btn">🛒 Cart <span id="cartCount" class="cart-count">0</span></button>
       </div>
     </div>
 
+    <!-- Home Page Content -->
     <div id="homePage" class="page-section active-page">
       <div class="hero fade-up">
         <div class="brand-name">AXEPEAK</div>
         <div class="quote-line">LIFE'S JOURNEY IS FILLED WITH OBSTACLES</div>
         <div class="quote-line">BUT WITH EVERY STEP YOU TAKE</div>
         <div class="quote-line">YOU'RE MAKING A DIFFERENCE.</div>
-        <div class="peak-message">✦ REACH YOUR PEAK ✦</div>
+        <div class="slogan-rotator">
+          <div class="dynamic-slogan" id="rotatingSlogan">✦ REACH YOUR PEAK ✦</div>
+        </div>
+        <div class="peak-message">✦ Elevation is earned. No comfort at the summit. ✦</div>
         <button class="shop-btn" id="heroShopBtn">SHOP NOW</button>
       </div>
-
+      
       <div class="brand-manifesto fade-up"><div class="manifesto-text">WE DON'T MAKE CLOTHES.<br>WE BUILD IDENTITY.<span>✦ AXEPEAK MANIFESTO ✦</span></div></div>
       <div class="timeless-banner fade-up"><h2>TIMELESS</h2></div>
-      
       <div class="why-section fade-up"><div class="featured-title">✦ WHY AXEPEAK? ✦</div><div class="why-grid"><div class="why-card"><div class="why-icon"><i class="fas fa-infinity"></i></div><h3>Timeless Design</h3><p>Minimalist aesthetics that never go out of style.</p></div><div class="why-card"><div class="why-icon"><i class="fas fa-feather-alt"></i></div><h3>Premium Fabric</h3><p>100% organic cotton and sustainable blends.</p></div><div class="why-card"><div class="why-icon"><i class="fas fa-mountain"></i></div><h3>Built for Ambition</h3><p>Engineered for movement. Designed for your highest potential.</p></div></div></div>
       
-      <div class="ai-suggestion fade-up"><div class="featured-title">✨ AI STYLE SUGGESTION ✨</div><div class="ai-subtitle" style="color:var(--text-secondary); margin-bottom:20px;">Complete the look — curated just for you</div><div class="ai-grid"><div class="ai-card"><h3>🏔️ Mountain Explorer</h3><p>Classic Hoodie + Cargo Pants + Beanie</p><div class="ai-buttons"><button class="ai-btn" onclick="addSuggestionToCart('Classic Hoodie', 21)">Add Hoodie</button><button class="ai-btn" onclick="addSuggestionToCart('Cargo Pants', 31.50)">Add Pants</button><button class="ai-btn" onclick="addSuggestionToCart('Beanie', 15)">Add Beanie</button></div></div><div class="ai-card"><h3>🌿 Urban Minimal</h3><p>Premium T-Shirt + Denim Jacket + Joggers</p><div class="ai-buttons"><button class="ai-btn" onclick="addSuggestionToCart('Premium T-Shirt', 17.50)">Add Shirt</button><button class="ai-btn" onclick="addSuggestionToCart('Denim Jacket', 45)">Add Jacket</button><button class="ai-btn" onclick="addSuggestionToCart('Joggers', 35)">Add Joggers</button></div></div><div class="ai-card"><h3>⚡ Peak Performance</h3><p>Zip Hoodie + Track Pants + Cap</p><div class="ai-buttons"><button class="ai-btn" onclick="addSuggestionToCart('Zip Hoodie', 24.50)">Add Hoodie</button><button class="ai-btn" onclick="addSuggestionToCart('Track Pants', 25)">Add Pants</button><button class="ai-btn" onclick="addSuggestionToCart('Cap', 22)">Add Cap</button></div></div></div></div>
+      <!-- Exclusive Drop Countdown -->
+      <div class="exclusive-drop fade-up">
+        <div class="drop-badge">✦ EXCLUSIVE DROP ✦</div>
+        <div class="drop-title">PEAK COLLECTION</div>
+        <div class="drop-sub">Limited edition alpine-inspired apparel. Only 500 pieces worldwide. The summit awaits.</div>
+        <div class="countdown-container" id="countdownTimer">
+          <div class="countdown-item"><div class="countdown-number" id="days">00</div><div class="countdown-label">DAYS</div></div>
+          <div class="countdown-item"><div class="countdown-number" id="hours">00</div><div class="countdown-label">HOURS</div></div>
+          <div class="countdown-item"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">MINUTES</div></div>
+          <div class="countdown-item"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">SECONDS</div></div>
+        </div>
+        <div class="mountain-divider"></div>
+        <div class="notify-group">
+          <input type="email" class="notify-input" id="notifyEmail" placeholder="Your email address">
+          <button class="notify-btn" id="notifyBtn">NOTIFY ME →</button>
+        </div>
+        <div class="limited-edition"><i class="fas fa-mountain"></i><span>FIRST 100 SUBSCRIBERS GET EARLY ACCESS + 15% OFF</span><i class="fas fa-mountain"></i></div>
+      </div>
       
-      <div class="lookbook-section fade-up"><div class="featured-title">✦ THE AXEPEAK LOOKBOOK ✦</div><div class="lookbook-grid"><div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Urban Explorer</h3><p>Classic Hoodie + Cargo Pants + Beanie</p><span class="lookbook-tag">Streetwear</span></div></div><div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1483985988355-9e9f3a5b9d9e?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Mountain Minimal</h3><p>Premium T-Shirt + Denim Jacket + Joggers</p><span class="lookbook-tag">Outdoor</span></div></div><div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Peak Performance</h3><p>Zip Hoodie + Track Pants + Cap</p><span class="lookbook-tag">Athleisure</span></div></div></div></div>
+      <div class="ai-suggestion fade-up"><div class="featured-title">✨ AI STYLE SUGGESTION ✨</div><div class="ai-subtitle" style="color:var(--text-secondary); margin-bottom:20px;">Complete the look — curated just for you</div><div class="why-grid"><div class="why-card"><h3>🏔️ Mountain Explorer</h3><p>Classic Hoodie + Sweat Pants + Beanie</p><button class="modal-btn" onclick="addToCart('Classic Hoodie', 21)" style="margin-top:10px;">Add Hoodie</button></div><div class="why-card"><h3>🌿 Urban Minimal</h3><p>Polo + Denim Jacket + Joggers</p><button class="modal-btn" onclick="addToCart('Polo', 24.50)" style="margin-top:10px;">Add Polo</button></div><div class="why-card"><h3>⚡ Peak Performance</h3><p>Zip Hoodie + Track Pants + Cap</p><button class="modal-btn" onclick="addToCart('Zip Hoodie', 24.50)" style="margin-top:10px;">Add Hoodie</button></div></div></div>
+      
+      <div class="lookbook-section fade-up"><div class="featured-title">✦ THE AXEPEAK LOOKBOOK ✦</div><div class="lookbook-grid"><div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Urban Explorer</h3><p>Classic Hoodie + Sweat Pants + Beanie</p><span class="lookbook-tag">Streetwear</span></div></div><div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1483985988355-9e9f3a5b9d9e?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Mountain Minimal</h3><p>Polo + Denim Jacket + Joggers</p><span class="lookbook-tag">Outdoor</span></div></div><div class="lookbook-item"><img class="lookbook-img" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=800&fit=crop"><div class="lookbook-overlay"><h3>Peak Performance</h3><p>Zip Hoodie + Track Pants + Cap</p><span class="lookbook-tag">Athleisure</span></div></div></div></div>
       
       <div class="reviews-section fade-up"><div class="featured-title">✦ CUSTOMER REVIEWS ✦</div><div class="reviews-grid"><div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Best hoodie I've ever bought. The quality is incredible."</div><div class="review-author">— Michael T.</div></div><div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Timeless design and sustainable fabric. Worth every penny!"</div><div class="review-author">— Sarah J.</div></div><div class="review-card"><div class="review-stars">★★★★☆</div><div class="review-text">"Great shirt, soft material. Shipping was fast."</div><div class="review-author">— David L.</div></div></div></div>
       
       <div class="story-section fade-up"><div class="featured-title">✦ OUR STORY ✦</div><div class="story-content"><p>AXEPEAK represents the climb toward your highest self. Born from the belief that every obstacle is an opportunity, we craft timeless apparel for those who refuse to settle.<br><br><strong>✦ REACH YOUR PEAK ✦</strong></p></div></div>
       
-      <div class="follow-section fade-up"><div class="featured-title">✨ FOLLOW OUR JOURNEY ✨</div><div class="social-links"><a href="#" class="social-icon" id="instaLink"><i class="fab fa-instagram"></i></a><a href="#" class="social-icon" id="twitterLink"><i class="fab fa-twitter"></i></a><a href="#" class="social-icon" id="facebookLink"><i class="fab fa-facebook-f"></i></a><a href="#" class="social-icon" id="tiktokLink"><i class="fab fa-tiktok"></i></a></div></div>
+      <div class="follow-section fade-up"><div class="featured-title">✨ FOLLOW OUR JOURNEY ✨</div><div class="social-links"><a href="#" class="social-icon"><i class="fab fa-instagram"></i></a><a href="#" class="social-icon"><i class="fab fa-twitter"></i></a><a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a></div></div>
       
       <div class="subscribe-section fade-up"><div class="featured-title">SUBSCRIBE</div><form class="subscribe-form" id="subscribeForm"><input type="email" id="subEmail" placeholder="Your email address" required><button type="submit">SUBSCRIBE →</button></form></div>
     </div>
 
-    <div id="shopPage" class="page-section">
-      <div class="hero" style="padding:30px 20px;"><div class="brand-name" style="font-size:48px;">SHOP COLLECTION</div><p>Discover our complete range</p></div>
-      <div class="timeless-banner"><h2>COMPLETE CATALOG</h2></div>
-      <div class="category-filters" id="shopCategoryFilters"><button class="filter-btn active" data-cat="all">ALL</button><button class="filter-btn" data-cat="t-shirt">👕 T-SHIRTS</button><button class="filter-btn" data-cat="hoodie">🧥 HOODIES</button><button class="filter-btn" data-cat="pants">👖 PANTS</button></div>
-      <div class="products-grid" id="shopProductGrid"></div>
-    </div>
+    <!-- Shop Page -->
+    <div id="shopPage" class="page-section"><div class="hero" style="padding:30px 20px;"><div class="brand-name" style="font-size:48px;">SHOP COLLECTION</div><p>Discover our complete range</p></div><div class="category-filters" id="shopCategoryFilters"><button class="filter-btn active" data-cat="all">ALL</button><button class="filter-btn" data-cat="t-shirt">👕 T-SHIRTS / POLOS</button><button class="filter-btn" data-cat="hoodie">🧥 HOODIES</button><button class="filter-btn" data-cat="pants">👖 PANTS</button></div><div class="products-grid" id="shopProductGrid"></div></div>
 
     <div id="wishlistPage" class="page-section"><div class="hero" style="padding:30px 20px;"><div class="brand-name" style="font-size:48px;">❤️ MY WISHLIST</div><p>Your saved favorites — ready when you are</p></div><div id="wishlistGrid" class="wishlist-grid"></div></div>
 
-    <div class="premium-footer">
-      <div class="footer-grid">
-        <div class="footer-col"><h4>AXEPEAK</h4><p>Timeless apparel for those who climb higher.</p><div class="payment-icons"><i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-cc-paypal"></i><i class="fab fa-apple-pay"></i></div></div>
-        <div class="footer-col"><h4>Support</h4><a href="#">Customer Support</a><a href="#">Returns</a><a href="#">FAQ</a></div>
-        <div class="footer-col"><h4>Company</h4><a href="#">About Us</a><a href="#">Sustainability</a></div>
-        <div class="footer-col"><h4>Shipping Estimator</h4><div class="shipping-estimator"><select id="countrySelect"><option value="">Select country</option><option value="us">US</option><option value="ca">Canada</option><option value="uk">UK</option><option value="eu">Europe</option><option value="au">Australia</option></select><button id="estimateBtn">Calculate</button><div id="shippingResult" class="shipping-result"></div></div></div>
-        <div class="footer-col"><h4>Newsletter</h4><div class="newsletter-form"><input type="email" id="footerEmail" placeholder="Your email"><button id="footerSubscribeBtn">Subscribe →</button></div></div>
-      </div>
-      <div class="footer-bottom"><p>© 2025 AXEPEAK — Every step makes a difference.</p></div>
-    </div>
+    <div class="premium-footer"><div class="footer-grid"><div class="footer-col"><h4>AXEPEAK</h4><p>Timeless apparel for those who climb higher.</p><div class="payment-icons"><i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fab fa-cc-amex"></i><i class="fab fa-cc-paypal"></i></div></div><div class="footer-col"><h4>Support</h4><a href="#">Customer Support</a><a href="#">Returns</a><a href="#">FAQ</a></div><div class="footer-col"><h4>Company</h4><a href="#">About Us</a><a href="#">Sustainability</a></div><div class="footer-col"><h4>Shipping Estimator</h4><div class="shipping-estimator"><select id="countrySelect"><option value="">Select country</option><option value="us">US</option><option value="ca">Canada</option><option value="uk">UK</option></select><button id="estimateBtn">Calculate</button><div id="shippingResult" class="shipping-result"></div></div></div><div class="footer-col"><h4>Newsletter</h4><div class="newsletter-form"><input type="email" id="footerEmail" placeholder="Your email"><button id="footerSubscribeBtn">Subscribe →</button></div></div></div><div class="footer-bottom"><p>© 2025 AXEPEAK — Every step makes a difference.</p></div></div>
   </div>
 </div>
 
-<div id="paymentModal" class="modal">
-  <div class="modal-content">
-    <h2>Select Payment Method</h2>
-    <div class="payment-methods-grid">
-      <div class="payment-option" data-method="Credit Card" data-type="card">💳 Credit Card</div>
-      <div class="payment-option" data-method="Visa" data-type="card">💳 Visa</div>
-      <div class="payment-option" data-method="Mastercard" data-type="card">💳 Mastercard</div>
-      <div class="payment-option" data-method="PayPal" data-type="instant">💰 PayPal</div>
-      <div class="payment-option" data-method="Apple Pay" data-type="instant">🍎 Apple Pay</div>
-      <div class="payment-option" data-method="Google Pay" data-type="instant">📱 Google Pay</div>
-      <div class="payment-option" data-method="Cash on Delivery" data-type="cod">💵 Cash on Delivery</div>
-    </div>
-    <div id="cardForm" class="card-form"><input type="text" placeholder="Card Number" id="cardNumber"><input type="text" placeholder="Cardholder Name" id="cardName"><div class="card-row"><input type="text" placeholder="MM/YY" id="cardExpiry"><input type="text" placeholder="CVV" id="cardCvv"></div><button class="pay-now-btn" id="confirmCardPayment">Pay Now →</button></div>
-    <button class="close-modal">Cancel</button>
-  </div>
-</div>
-
-<audio id="clickSound" preload="auto"><source src="https://www.soundjay.com/misc/sounds/button-click-01.mp3" type="audio/mpeg"></audio>
+<div id="paymentModal" class="modal"><div class="modal-content"><h2>Select Payment Method</h2><div class="payment-methods-grid"><div class="payment-option" data-method="Credit Card" data-type="card">💳 Credit Card</div><div class="payment-option" data-method="PayPal" data-type="instant">💰 PayPal</div><div class="payment-option" data-method="Apple Pay" data-type="instant">🍎 Apple Pay</div><div class="payment-option" data-method="Cash on Delivery" data-type="cod">💵 Cash on Delivery</div></div><div id="cardForm" class="card-form"><input type="text" placeholder="Card Number" id="cardNumber"><input type="text" placeholder="Cardholder Name" id="cardName"><div class="card-row"><input type="text" placeholder="MM/YY" id="cardExpiry"><input type="text" placeholder="CVV" id="cardCvv"></div><button class="pay-now-btn" id="confirmCardPayment">Pay Now →</button></div><button class="close-modal">Cancel</button></div></div>
 
 <script>
-  // ========== 3D SIGNATURE EXIT ANIMATION ==========
-  let exitTriggered = false;
-  
-  function triggerExitAnimation() {
-    if (exitTriggered) return;
-    exitTriggered = true;
-    
-    // Activate all exit elements
-    document.getElementById('exitDarkOverlay').classList.add('active');
-    document.getElementById('exitContainer').classList.add('active');
-    document.getElementById('exitFarewell3d').classList.add('active');
-    
-    // Create particle burst
-    for (let i = 0; i < 80; i++) {
-      setTimeout(() => {
-        const particle = document.createElement('div');
-        particle.classList.add('exit-particle-3d');
-        particle.style.left = Math.random() * window.innerWidth + 'px';
-        particle.style.top = Math.random() * window.innerHeight + 'px';
-        particle.style.animationDuration = 0.8 + Math.random() * 1 + 's';
-        document.body.appendChild(particle);
-        setTimeout(() => particle.remove(), 1500);
-      }, i * 15);
-    }
-    
-    // Add light sweep
-    const lightSweep = document.createElement('div');
-    lightSweep.classList.add('exit-light-sweep');
-    document.body.appendChild(lightSweep);
-    setTimeout(() => lightSweep.remove(), 1000);
-    
-    // Reset after animation
-    setTimeout(() => {
-      document.getElementById('exitDarkOverlay').classList.remove('active');
-      document.getElementById('exitContainer').classList.remove('active');
-      document.getElementById('exitFarewell3d').classList.remove('active');
-      exitTriggered = false;
-    }, 1800);
-  }
-  
-  // Trigger when mouse leaves window
-  document.addEventListener('mouseleave', (e) => {
-    if (e.clientY <= 0) {
-      triggerExitAnimation();
-    }
-  });
-  
-  // Also trigger on page unload
-  window.addEventListener('beforeunload', () => {
-    triggerExitAnimation();
-  });
-
-  // ========== 3D TILT CARDS ==========
-  function initTiltCards() {
-    const cards = document.querySelectorAll('.product-card');
-    cards.forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = (y - centerY) / 12;
-        const rotateY = (centerX - x) / 12;
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-      });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-      });
-    });
-  }
-
-  // ========== LOADING ==========
-  let progress = 0;
-  const loadingInterval = setInterval(() => {
-    progress += Math.random() * 15 + 5;
-    if (progress >= 100) { progress = 100; clearInterval(loadingInterval);
-      setTimeout(() => { document.getElementById('loadingOverlay').classList.add('fade-out'); document.getElementById('mainContent').classList.add('visible'); setTimeout(() => { document.getElementById('loadingOverlay').style.display = 'none'; }, 1200); }, 300); }
-    document.getElementById('loadingPercentage').innerText = Math.floor(progress) + '%';
-    document.getElementById('loadingBarFill').style.width = progress + '%';
-  }, 120);
-
-  // Seasonal
-  const seasonSelect = document.getElementById('seasonSelector');
-  const setSeason = (s) => { document.body.setAttribute('data-season', s); localStorage.setItem('axpeak_season', s); };
-  seasonSelect.value = localStorage.getItem('axpeak_season') || 'winter';
-  setSeason(seasonSelect.value);
-  seasonSelect.addEventListener('change', (e) => setSeason(e.target.value));
-
-  // Mouse spotlight
-  const spotlight = document.getElementById('spotlight');
-  document.addEventListener('mousemove', (e) => { spotlight.style.left = e.clientX + 'px'; spotlight.style.top = e.clientY + 'px'; spotlight.classList.add('active'); });
-  document.addEventListener('mouseleave', () => spotlight.classList.remove('active'));
-
-  // Scroll progress
-  window.addEventListener('scroll', () => { const winScroll = document.body.scrollTop || document.documentElement.scrollTop; const height = document.documentElement.scrollHeight - document.documentElement.clientHeight; document.getElementById('progressBar').style.width = (winScroll / height) * 100 + '%'; });
-
-  // Click sound & cursor
-  function playClickSound() { const audio = document.getElementById('clickSound'); if (audio) { audio.currentTime = 0; audio.play().catch(e => {}); } }
-  document.querySelectorAll('button, a, .filter-btn, .nav-link, .icon-btn, .cart-btn, .shop-btn, .payment-option, .modal-btn, .close-modal, .social-icon, .wishlist-btn, .ai-btn, .season-selector, .add-to-cart').forEach(el => el.addEventListener('click', playClickSound));
-  const cursorEl = document.getElementById('customCursor');
-  document.addEventListener('mousemove', (e) => { cursorEl.style.left = e.clientX + 'px'; cursorEl.style.top = e.clientY + 'px'; });
-  document.querySelectorAll('a, button, .product-card, .wishlist-btn, .ai-btn, .social-icon, .season-selector, .filter-btn, .nav-link, .icon-btn, .cart-btn, .shop-btn').forEach(el => { el.addEventListener('mouseenter', () => cursorEl.classList.add('hover')); el.addEventListener('mouseleave', () => cursorEl.classList.remove('hover')); });
-
-  // Parallax
-  const parallaxMtn = document.getElementById('parallaxMountain');
-  const parallaxSun = document.getElementById('parallaxSun');
-  window.addEventListener('scroll', () => { const y = window.scrollY; if (parallaxMtn) parallaxMtn.style.transform = `translateY(${y * 0.08}px)`; if (parallaxSun) parallaxSun.style.transform = `translateY(${y * 0.05}px)`; });
-
-  function createParticles() { const container = document.getElementById('particles'); for(let i = 0; i < 60; i++) { let p = document.createElement('div'); p.classList.add('particle'); let size = Math.random() * 5 + 1; p.style.width = size + 'px'; p.style.height = size + 'px'; p.style.left = Math.random() * 100 + '%'; p.style.animationDuration = Math.random() * 15 + 10 + 's'; p.style.animationDelay = Math.random() * 10 + 's'; container.appendChild(p); } }
-  createParticles();
-
-  const fadeElements = document.querySelectorAll('.fade-up'); const obs = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 }); fadeElements.forEach(el => obs.observe(el));
-
-  // Theme
-  const themeToggle = document.getElementById('themeToggle');
-  if (localStorage.getItem('axpeak_theme') === 'light') { document.body.classList.add('light'); themeToggle.checked = true; }
-  themeToggle.addEventListener('change', () => { if (themeToggle.checked) { document.body.classList.add('light'); localStorage.setItem('axpeak_theme', 'light'); } else { document.body.classList.remove('light'); localStorage.setItem('axpeak_theme', 'dark'); } });
-
-  // Products
-  const products = [
-    { id: "p1", cat: "t-shirt", name: "Classic T-Shirt", price: 14, orig: 20, img: "https://cdn.pixabay.com/photo/2017/01/14/12/59/tshirt-1979270_640.jpg", colors: ["black", "white", "navy"] },
-    { id: "p2", cat: "t-shirt", name: "Premium T-Shirt", price: 17.50, orig: 25, img: "https://cdn.pixabay.com/photo/2018/12/06/12/03/women-s-t-shirt-3858942_640.jpg", colors: ["black", "white", "beige"] },
-    { id: "p3", cat: "hoodie", name: "Classic Hoodie", price: 21, orig: 30, img: "https://cdn.pixabay.com/photo/2021/01/12/07/20/hoodie-5911254_640.jpg", colors: ["black", "grey", "navy"] },
-    { id: "p4", cat: "hoodie", name: "Zip Hoodie", price: 24.50, orig: 35, img: "https://cdn.pixabay.com/photo/2022/03/03/02/43/hoodie-7045212_640.jpg", colors: ["black", "burgundy", "olive"] },
-    { id: "p5", cat: "pants", name: "Cargo Pants", price: 31.50, orig: 45, img: "https://cdn.pixabay.com/photo/2016/11/23/13/17/cargo-pants-1852866_640.jpg", colors: ["black", "olive", "beige"] },
-    { id: "p6", cat: "pants", name: "Classic Jeans", price: 31.50, orig: 45, img: "https://cdn.pixabay.com/photo/2016/11/19/15/32/jeans-1839719_640.jpg", colors: ["blue", "black", "grey"] }
+  // ========== ROTATING SLOGAN SYSTEM ==========
+  const slogans = [
+    "✦ REACH YOUR PEAK ✦",
+    "✦ BUILT FOR THE CLIMB ✦",
+    "✦ NO COMFORT AT THE SUMMIT ✦",
+    "✦ ELEVATION IS EARNED ✦"
   ];
-
-  let wishlist = JSON.parse(localStorage.getItem('axpeak_wishlist') || '[]');
-  function saveWishlist() { localStorage.setItem('axpeak_wishlist', JSON.stringify(wishlist)); renderWishlistPage(); }
-  function toggleWishlist(id, btn) { const idx = wishlist.indexOf(id); if (idx === -1) { wishlist.push(id); if (btn) btn.classList.add('active'); alert('✨ Added to wishlist!'); } else { wishlist.splice(idx, 1); if (btn) btn.classList.remove('active'); } saveWishlist(); }
-  function renderWishlistPage() { const container = document.getElementById('wishlistGrid'); if (!container) return; const wp = products.filter(p => wishlist.includes(p.id)); if (wp.length === 0) { container.innerHTML = '<div class="empty-wishlist"><i class="far fa-heart" style="font-size:48px;margin-bottom:20px;display:block;"></i><h3>Your wishlist is empty</h3><button class="shop-btn" style="margin-top:20px;" onclick="document.getElementById(\'shopNavLink\').click()">Start Shopping →</button></div>'; return; } container.innerHTML = wp.map(p => `<div class="wishlist-item"><button class="remove-wishlist" onclick="toggleWishlist('${p.id}', null); renderShopGrids();">🗑️</button><img class="product-img" src="${p.img}" style="height:200px;"><div class="product-title">${p.name}</div><div class="price-container"><span class="original-price">$${p.orig}</span><span class="product-price">$${p.price}</span></div><button class="modal-btn" style="padding:8px;font-size:14px;" onclick="addToCart('${p.name}', ${p.price}); toggleWishlist('${p.id}', null);">MOVE TO CART →</button></div>`).join(''); }
-  function renderShopGrids() { renderProductGrid('shopProductGrid', 'all'); renderWishlistPage(); initTiltCards(); }
-  function renderProductGrid(containerId, filterCat = "all") { const container = document.getElementById(containerId); if(!container) return; let filtered = filterCat === "all" ? products : products.filter(p => p.cat === filterCat); container.innerHTML = filtered.map(p => `<div class="product-card" data-name="${p.name}" data-price="${p.price}" data-id="${p.id}"><button class="wishlist-btn ${wishlist.includes(p.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${p.id}', this)"><i class="${wishlist.includes(p.id) ? 'fas' : 'far'} fa-heart"></i></button><img class="product-img" src="${p.img}"><div class="product-title">${p.name}</div><div class="price-container"><span class="original-price">$${p.orig}</span><span class="product-price">$${p.price}</span></div><div class="color-swatches">${p.colors.map(c => `<div class="color-swatch ${c}" data-color="${c}" onclick="event.stopPropagation(); selectColor(this, '${p.name}', '${c}')"></div>`).join('')}</div><button class="modal-btn" style="padding:8px;font-size:14px;" onclick="addToCart('${p.name}', ${p.price})">ADD TO CART →</button></div>`).join(''); initTiltCards(); }
-  window.selectColor = function(el, name, color) { document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected')); el.classList.add('selected'); alert(`✨ ${name} - ${color.toUpperCase()} selected`); };
-  window.addSuggestionToCart = function(name, price) { addToCart(name, price); };
-  renderProductGrid('shopProductGrid', 'all'); renderWishlistPage();
-  initTiltCards();
-
-  // Navigation
-  const homePage = document.getElementById('homePage'), shopPage = document.getElementById('shopPage'), wishlistPage = document.getElementById('wishlistPage');
-  function showHomePage() { homePage.classList.add('active-page'); shopPage.classList.remove('active-page'); wishlistPage.classList.remove('active-page'); }
-  function showShopPage() { homePage.classList.remove('active-page'); shopPage.classList.add('active-page'); wishlistPage.classList.remove('active-page'); renderProductGrid('shopProductGrid', 'all'); attachFilters(); }
-  function showWishlistPage() { homePage.classList.remove('active-page'); shopPage.classList.remove('active-page'); wishlistPage.classList.add('active-page'); renderWishlistPage(); }
-  function attachFilters() { document.querySelectorAll('#shopCategoryFilters .filter-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('#shopCategoryFilters .filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderProductGrid('shopProductGrid', btn.dataset.cat); }); }); }
-  document.getElementById('shopNavLink').addEventListener('click', e=>{e.preventDefault(); showShopPage();});
-  document.getElementById('wishlistNavLink').addEventListener('click', e=>{e.preventDefault(); showWishlistPage();});
-  document.getElementById('homeNavLink').addEventListener('click', e=>{e.preventDefault(); showHomePage();});
-  document.getElementById('heroShopBtn').addEventListener('click',()=>showShopPage());
-  document.getElementById('homeLogo').addEventListener('click',()=>showHomePage());
-  attachFilters();
-
-  // Search
-  const searchInput = document.getElementById('searchInput'); const suggestionsBox = document.getElementById('searchSuggestions');
-  searchInput.addEventListener('input', () => { const query = searchInput.value.toLowerCase().trim(); if (query.length === 0) { suggestionsBox.classList.remove('active'); return; } const matches = products.filter(p => p.name.toLowerCase().includes(query)); if (matches.length === 0) { suggestionsBox.innerHTML = '<div class="no-results">No matching products found</div>'; suggestionsBox.classList.add('active'); return; } suggestionsBox.innerHTML = matches.map(p => `<div class="suggestion-item" data-name="${p.name}" data-price="${p.price}" data-img="${p.img}"><img class="suggestion-img" src="${p.img}"><div><div class="suggestion-name">${p.name}</div><div class="suggestion-price">$${p.price}</div></div></div>`).join(''); suggestionsBox.classList.add('active'); document.querySelectorAll('.suggestion-item').forEach(item => { item.addEventListener('click', () => { addToCart(item.dataset.name, parseFloat(item.dataset.price)); searchInput.value = ''; suggestionsBox.classList.remove('active'); }); }); });
-  document.addEventListener('click', (e) => { if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) suggestionsBox.classList.remove('active'); });
-
-  // Cart & Payment
+  let sloganIndex = 0;
+  const sloganElement = document.getElementById('rotatingSlogan');
+  
+  function rotateSlogan() {
+    if (!sloganElement) return;
+    sloganElement.classList.add('fade-out');
+    setTimeout(() => {
+      sloganIndex = (sloganIndex + 1) % slogans.length;
+      sloganElement.textContent = slogans[sloganIndex];
+      sloganElement.classList.remove('fade-out');
+      sloganElement.classList.add('fade-in');
+      setTimeout(() => sloganElement.classList.remove('fade-in'), 100);
+    }, 300);
+  }
+  setInterval(rotateSlogan, 4500);
+  
+  // Countdown (7 days)
+  let targetDate = new Date(); targetDate.setDate(targetDate.getDate() + 7); targetDate.setHours(0,0,0,0);
+  function updateCountdown() {
+    let now = new Date().getTime(), dist = targetDate - now;
+    if(dist<0){ document.getElementById('days').innerText='00'; document.getElementById('hours').innerText='00'; document.getElementById('minutes').innerText='00'; document.getElementById('seconds').innerText='00'; return; }
+    document.getElementById('days').innerText = Math.floor(dist/86400000).toString().padStart(2,'0');
+    document.getElementById('hours').innerText = Math.floor((dist%86400000)/3600000).toString().padStart(2,'0');
+    document.getElementById('minutes').innerText = Math.floor((dist%3600000)/60000).toString().padStart(2,'0');
+    document.getElementById('seconds').innerText = Math.floor((dist%60000)/1000).toString().padStart(2,'0');
+  }
+  updateCountdown(); setInterval(updateCountdown,1000);
+  
+  document.getElementById('notifyBtn').addEventListener('click',()=>{ let email = document.getElementById('notifyEmail').value; if(email&&email.includes('@')) alert(`✨ Notified! We'll alert you at ${email} for the Peak Collection.`); else alert('Please enter a valid email.'); });
+  
+  // ========== UPDATED PRODUCTS: Cargo -> Sweat Pants, Premium T-Shirt -> Polo ==========
+  const products = [
+    { id: "p1", cat: "t-shirt", name: "Classic T-Shirt", price: 14, orig: 20, img: "https://cdn.pixabay.com/photo/2017/01/14/12/59/tshirt-1979270_640.jpg" },
+    { id: "p2", cat: "t-shirt", name: "Polo", price: 24.50, orig: 35, img: "https://cdn.pixabay.com/photo/2016/11/23/13/43/polo-shirt-1853259_640.jpg" },
+    { id: "p3", cat: "hoodie", name: "Classic Hoodie", price: 21, orig: 30, img: "https://cdn.pixabay.com/photo/2021/01/12/07/20/hoodie-5911254_640.jpg" },
+    { id: "p4", cat: "hoodie", name: "Zip Hoodie", price: 24.50, orig: 35, img: "https://cdn.pixabay.com/photo/2022/03/03/02/43/hoodie-7045212_640.jpg" },
+    { id: "p5", cat: "pants", name: "Sweat Pants", price: 34.50, orig: 49, img: "https://cdn.pixabay.com/photo/2016/11/21/17/44/sweatpants-1846938_640.jpg" },
+    { id: "p6", cat: "pants", name: "Classic Jeans", price: 31.50, orig: 45, img: "https://cdn.pixabay.com/photo/2016/11/19/15/32/jeans-1839719_640.jpg" }
+  ];
   let cart = JSON.parse(localStorage.getItem('axpeak_cart') || '[]');
-  function saveCart() { localStorage.setItem('axpeak_cart', JSON.stringify(cart)); updateCartUI(); }
-  function updateCartUI() { document.getElementById('cartCount').innerText = cart.reduce((s,i)=>s+i.qty,0); }
-  window.addToCart = function(name, price) { const existing = cart.find(i => i.name === name); if(existing) existing.qty++; else cart.push({name, price, qty: 1}); saveCart(); alert(`✨ ${name} added to cart!`); };
-
-  const paymentModal = document.getElementById('paymentModal');
-  let paymentTotal = 0;
-  const openPaymentModal = () => {
-    if (cart.length === 0) { alert('Your cart is empty'); return; }
-    paymentTotal = cart.reduce((s,i)=>s+(i.price*i.qty),0);
-    paymentModal.classList.add('active');
-  };
-  document.getElementById('cartButton').addEventListener('click', openPaymentModal);
-  let selectedMethod = null;
-  document.querySelectorAll('.payment-option').forEach(btn => {
-    btn.addEventListener('click', () => {
-      selectedMethod = btn.dataset.method;
-      const type = btn.dataset.type;
-      if (type === 'card') { document.getElementById('cardForm').classList.add('active'); }
-      else { document.getElementById('cardForm').classList.remove('active'); processPayment(selectedMethod, paymentTotal); }
-    });
-  });
-  document.getElementById('confirmCardPayment').addEventListener('click', () => { const cardNum = document.getElementById('cardNumber').value.trim(); if (cardNum) processPayment(selectedMethod || 'Card', paymentTotal); else alert('Please enter card details'); });
-  function processPayment(method, amount) { alert(`✅ Payment via ${method} successful!\nTotal: $${amount.toFixed(2)}\nThank you for shopping at AXEPEAK!\n\nREACH YOUR PEAK!`); cart = []; saveCart(); paymentModal.classList.remove('active'); }
-  document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', () => paymentModal.classList.remove('active')));
-
-  document.getElementById('estimateBtn')?.addEventListener('click', () => { const c = document.getElementById('countrySelect').value; const data = { us: { cost: 'Free', time: '3-5 days' }, ca: { cost: '$9.99', time: '5-7 days' }, uk: { cost: '$12.99', time: '5-8 days' }, eu: { cost: '$14.99', time: '6-9 days' }, au: { cost: '$19.99', time: '7-10 days' } }; const d = data[c]; if(d) document.getElementById('shippingResult').innerHTML = `🚚 Shipping: ${d.cost} • Est: ${d.time}`; else document.getElementById('shippingResult').innerHTML = 'Select a country'; });
-  document.getElementById('subscribeForm')?.addEventListener('submit', e=>{ e.preventDefault(); const email=document.getElementById('subEmail').value.trim(); if(email&&email.includes('@')) alert(`✅ Subscribed with ${email}!`); else alert('Please enter a valid email.'); });
-  document.getElementById('footerSubscribeBtn')?.addEventListener('click', () => { const email = document.getElementById('footerEmail').value.trim(); if(email&&email.includes('@')) alert(`✅ Subscribed with ${email}!`); else alert('Please enter a valid email.'); });
-  updateCartUI();
+  let wishlist = JSON.parse(localStorage.getItem('axpeak_wishlist') || '[]');
+  function saveCart(){ localStorage.setItem('axpeak_cart', JSON.stringify(cart)); updateCartUI(); }
+  function updateCartUI(){ document.getElementById('cartCount').innerText = cart.reduce((s,i)=>s+i.qty,0); }
+  window.addToCart = function(name, price){ let existing = cart.find(i=>i.name===name); if(existing) existing.qty++; else cart.push({name, price, qty:1}); saveCart(); alert(`✨ ${name} added to cart!`); };
+  function saveWishlist(){ localStorage.setItem('axpeak_wishlist', JSON.stringify(wishlist)); renderWishlist(); renderShopGrid(); }
+  function toggleWishlist(id, btnEl){ if(wishlist.includes(id)) wishlist = wishlist.filter(i=>i!==id); else wishlist.push(id); saveWishlist(); if(btnEl) btnEl.classList.toggle('active'); }
+  function renderShopGrid(){ const container = document.getElementById('shopProductGrid'); if(!container) return; const filter = document.querySelector('#shopCategoryFilters .filter-btn.active')?.dataset.cat || 'all'; let filtered = filter==='all'? products : products.filter(p=>p.cat===filter); container.innerHTML = filtered.map(p=>`<div class="product-card"><button class="wishlist-btn ${wishlist.includes(p.id)?'active':''}" onclick="toggleWishlist('${p.id}', this)"><i class="${wishlist.includes(p.id)?'fas':'far'} fa-heart"></i></button><img class="product-img" src="${p.img}"><div class="product-title">${p.name}</div><div class="price-container"><span class="original-price">$${p.orig}</span><span class="product-price">$${p.price}</span></div><button class="modal-btn" onclick="addToCart('${p.name}', ${p.price})">ADD TO CART →</button></div>`).join(''); initTiltCards(); }
+  function renderWishlist(){ const container = document.getElementById('wishlistGrid'); if(!container) return; const wl = products.filter(p=>wishlist.includes(p.id)); if(wl.length===0){ container.innerHTML='<div class="empty-wishlist"><i class="far fa-heart" style="font-size:48px;"></i><h3>Your wishlist is empty</h3><button class="shop-btn" onclick="document.getElementById(\'shopNavLink\').click()">Start Shopping →</button></div>'; return; } container.innerHTML = wl.map(p=>`<div class="wishlist-item"><button class="remove-wishlist" onclick="toggleWishlist('${p.id}', null); renderWishlist(); renderShopGrid();">🗑️ Remove</button><img class="product-img" src="${p.img}" style="height:180px;"><div class="product-title">${p.name}</div><div class="product-price">$${p.price}</div><button class="modal-btn" onclick="addToCart('${p.name}', ${p.price}); toggleWishlist('${p.id}', null);">MOVE TO CART →</button></div>`).join(''); }
+  function initTiltCards(){ document.querySelectorAll('.product-card').forEach(card=>{ card.addEventListener('mousemove',(e)=>{ let rect = card.getBoundingClientRect(); let x = e.clientX - rect.left, y = e.clientY - rect.top; let rotX = (y - rect.height/2)/12, rotY = (rect.width/2 - x)/12; card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-8px)`; }); card.addEventListener('mouseleave',()=>{ card.style.transform='perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)'; }); }); }
+  
+  // Page navigation
+  const homePage = document.getElementById('homePage'), shopPage = document.getElementById('shopPage'), wishlistPage = document.getElementById('wishlistPage');
+  document.getElementById('homeNavLink').addEventListener('click',e=>{e.preventDefault(); homePage.classList.add('active-page'); shopPage.classList.remove('active-page'); wishlistPage.classList.remove('active-page');});
+  document.getElementById('shopNavLink').addEventListener('click',e=>{e.preventDefault(); homePage.classList.remove('active-page'); shopPage.classList.add('active-page'); wishlistPage.classList.remove('active-page'); renderShopGrid();});
+  document.getElementById('wishlistNavLink').addEventListener('click',e=>{e.preventDefault(); homePage.classList.remove('active-page'); shopPage.classList.remove('active-page'); wishlistPage.classList.add('active-page'); renderWishlist();});
+  document.getElementById('heroShopBtn').addEventListener('click',()=>{ homePage.classList.remove('active-page'); shopPage.classList.add('active-page'); wishlistPage.classList.remove('active-page'); renderShopGrid();});
+  document.getElementById('homeLogo').addEventListener('click',()=>{ homePage.classList.add('active-page'); shopPage.classList.remove('active-page'); wishlistPage.classList.remove('active-page');});
+  document.querySelectorAll('#shopCategoryFilters .filter-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('#shopCategoryFilters .filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderShopGrid(); }); });
+  
+  const searchInput = document.getElementById('searchInput'), suggestionsBox = document.getElementById('searchSuggestions');
+  searchInput.addEventListener('input',()=>{ let query=searchInput.value.toLowerCase(); if(!query){ suggestionsBox.style.display='none'; return; } let matches=products.filter(p=>p.name.toLowerCase().includes(query)); if(!matches.length){ suggestionsBox.style.display='none'; return; } suggestionsBox.innerHTML=matches.map(p=>`<div style="padding:12px; cursor:pointer; border-bottom:1px solid var(--border);" onclick="addToCart('${p.name}',${p.price}); searchInput.value=''; suggestionsBox.style.display='none';">${p.name} - $${p.price}</div>`).join(''); suggestionsBox.style.display='block'; });
+  document.addEventListener('click',(e)=>{ if(!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) suggestionsBox.style.display='none'; });
+  
+  document.getElementById('cartButton').addEventListener('click',()=>{ if(cart.length===0){ alert('Cart is empty'); return; } let total = cart.reduce((s,i)=>s+i.price*i.qty,0); alert(`🛒 Cart Total: $${total.toFixed(2)}\nProceed to payment?`); document.getElementById('paymentModal').classList.add('active'); });
+  let selectedMethod=null; document.querySelectorAll('.payment-option').forEach(btn=>{ btn.addEventListener('click',()=>{ selectedMethod=btn.dataset.method; if(btn.dataset.type==='card') document.getElementById('cardForm').classList.add('active'); else { document.getElementById('cardForm').classList.remove('active'); alert(`✅ Payment via ${selectedMethod} successful!`); cart=[]; saveCart(); document.getElementById('paymentModal').classList.remove('active'); } }); });
+  document.getElementById('confirmCardPayment').addEventListener('click',()=>{ if(document.getElementById('cardNumber').value.trim()){ alert(`✅ Payment via ${selectedMethod||'Card'} successful!`); cart=[]; saveCart(); document.getElementById('paymentModal').classList.remove('active'); } else alert('Enter card details'); });
+  document.querySelectorAll('.close-modal').forEach(btn=>btn.addEventListener('click',()=>document.getElementById('paymentModal').classList.remove('active')));
+  
+  const themeToggle=document.getElementById('themeToggle'); if(localStorage.getItem('axpeak_theme')==='light'){ document.body.classList.add('light'); themeToggle.checked=true; }
+  themeToggle.addEventListener('change',()=>{ if(themeToggle.checked){ document.body.classList.add('light'); localStorage.setItem('axpeak_theme','light'); } else { document.body.classList.remove('light'); localStorage.setItem('axpeak_theme','dark'); } });
+  const seasonSelect=document.getElementById('seasonSelector'); seasonSelect.value=localStorage.getItem('axpeak_season')||'winter'; document.body.setAttribute('data-season',seasonSelect.value); seasonSelect.addEventListener('change',(e)=>document.body.setAttribute('data-season',e.target.value));
+  let exitTriggered=false; function triggerExit(){ if(exitTriggered) return; exitTriggered=true; document.getElementById('exitDarkOverlay').classList.add('active'); document.getElementById('exitContainer').classList.add('active'); document.getElementById('exitFarewell3d').classList.add('active'); for(let i=0;i<40;i++){ let p=document.createElement('div'); p.classList.add('exit-particle-3d'); p.style.left=Math.random()*window.innerWidth+'px'; p.style.top=Math.random()*window.innerHeight+'px'; document.body.appendChild(p); setTimeout(()=>p.remove(),1500); } setTimeout(()=>{ document.getElementById('exitDarkOverlay').classList.remove('active'); document.getElementById('exitContainer').classList.remove('active'); document.getElementById('exitFarewell3d').classList.remove('active'); exitTriggered=false; },1800); }
+  document.addEventListener('mouseleave',(e)=>{ if(e.clientY<=0) triggerExit(); });
+  let progress=0; const loadingInt=setInterval(()=>{ progress+=Math.random()*15+5; if(progress>=100){ progress=100; clearInterval(loadingInt); setTimeout(()=>{ document.getElementById('loadingOverlay').classList.add('fade-out'); document.getElementById('mainContent').classList.add('visible'); setTimeout(()=>document.getElementById('loadingOverlay').style.display='none',1200); },300); } document.getElementById('loadingPercentage').innerText=Math.floor(progress)+'%'; document.getElementById('loadingBarFill').style.width=progress+'%'; },120);
+  const spotlight=document.getElementById('spotlight'); document.addEventListener('mousemove',(e)=>{ spotlight.style.left=e.clientX+'px'; spotlight.style.top=e.clientY+'px'; spotlight.classList.add('active'); }); document.addEventListener('mouseleave',()=>spotlight.classList.remove('active'));
+  const cursor=document.getElementById('customCursor'); document.addEventListener('mousemove',(e)=>{ cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px'; }); document.querySelectorAll('a,button,.product-card').forEach(el=>{ el.addEventListener('mouseenter',()=>cursor.classList.add('hover')); el.addEventListener('mouseleave',()=>cursor.classList.remove('hover')); });
+  window.addEventListener('scroll',()=>{ let winScroll=document.body.scrollTop||document.documentElement.scrollTop, height=document.documentElement.scrollHeight-document.documentElement.clientHeight; document.getElementById('progressBar').style.width=(winScroll/height)*100+'%'; });
+  const fadeEls=document.querySelectorAll('.fade-up'); const obs=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); },{threshold:0.1}); fadeEls.forEach(el=>obs.observe(el));
+  document.getElementById('estimateBtn')?.addEventListener('click',()=>{ let c=document.getElementById('countrySelect').value; let cost={us:'Free',ca:'$9.99',uk:'$12.99'}; document.getElementById('shippingResult').innerHTML=c?`🚚 Shipping: ${cost[c]}`:'Select a country'; });
+  document.getElementById('subscribeForm')?.addEventListener('submit',e=>{ e.preventDefault(); let email=document.getElementById('subEmail').value; if(email.includes('@')) alert(`✅ Subscribed with ${email}!`); else alert('Valid email required'); });
+  document.getElementById('footerSubscribeBtn')?.addEventListener('click',()=>{ let email=document.getElementById('footerEmail').value; if(email.includes('@')) alert(`✅ Subscribed with ${email}!`); else alert('Valid email required'); });
+  renderShopGrid(); renderWishlist(); updateCartUI(); initTiltCards();
 </script>
 </body>
 </html>
