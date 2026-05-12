@@ -1,1 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>SOLAR SMASH - Planet Cracking System | Earth Destruction Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Orbitron', 'Segoe UI', monospace;
+            background: #000;
+            cursor: crosshair;
+            user-select: none;
+        }
+        
+        .game-ui {
+            position: absolute;
+            z-index: 200;
+            pointer-events: none;
+            font-family: 'Orbitron', monospace;
+        }
+        
+        #game-title {
+            top: 20px;
+            left: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff3366;
+            text-shadow: 0 0 10px rgba(255,51,102,0.8);
+            background: rgba(0,0,0,0.7);
+            padding: 8px 18px;
+            border-radius: 8px;
+            border-left: 4px solid #ff3366;
+        }
+        
+        #health-container {
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: rgba(0,0,0,0.85);
+            border-radius: 16px;
+            padding: 10px 18px;
+            border: 1px solid #ff3366;
+        }
+        #health-label {
+            color: #ffaa88;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        #health-bar-bg {
+            width: 100%;
+            height: 18px;
+            background: #331111;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        #health-bar-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #44ff44, #ffaa00, #ff3300);
+            border-radius: 20px;
+            transition: width 0.15s ease;
+        }
+        #health-percent { color: #ff8866; font-weight: bold; }
+        
+        #score-box {
+            top: 100px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 8px 18px;
+            border-radius: 16px;
+            border: 1px solid gold;
+            text-align: center;
+        }
+        #score-label { font-size: 11px; color: #ffcc88; }
+        #score-value { font-size: 28px; font-weight: bold; color: gold; text-shadow: 0 0 8px orange; }
+        
+        #weapon-selector {
+            bottom: 100px;
+            left: 20px;
+            background: rgba(0,0,0,0.85);
+            border-radius: 50px;
+            padding: 8px;
+            display: flex;
+            gap: 10px;
+            border: 1px solid #ff3366;
+            pointer-events: auto;
+        }
+        .weapon-btn {
+            background: rgba(30,30,50,0.9);
+            border: none;
+            color: #aaa;
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .weapon-btn:hover { background: #ff3366; color: white; transform: scale(1.05); }
+        .weapon-btn.active {
+            background: linear-gradient(135deg, #ff3366, #cc1144);
+            color: white;
+            box-shadow: 0 0 15px #ff3366;
+        }
+        
+        #weapon-status {
+            bottom: 80px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #ff5555;
+            border: 2px solid #ff3366;
+        }
+        
+        .instruction {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 11px;
+            white-space: nowrap;
+            color: #ccc;
+        }
+        
+        #restart-button {
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ffaa44, #ff6600);
+            border: none;
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 400;
+            display: none;
+            pointer-events: auto;
+            box-shadow: 0 0 30px orange;
+        }
+        
+        .damage-number {
+            position: fixed;
+            color: #ff6644;
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 0 0 10px red;
+            pointer-events: none;
+            z-index: 1001;
+            animation: floatUp 0.8s ease-out forwards;
+        }
+        
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0px) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1.2); }
+        }
+        
+        .explosion-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255,100,0,0.9) 0%, rgba(255,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1002;
+            animation: explode 0.5s ease-out forwards;
+        }
+        
+        @keyframes explode {
+            0% { opacity: 1; width: 40px; height: 40px; }
+            100% { opacity: 0; width: 180px; height: 180px; }
+        }
+        
+        #victory-text {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff3300;
+            text-shadow: 0 0 20px red;
+            z-index: 500;
+            display: none;
+            white-space: nowrap;
+            font-family: 'Orbitron', monospace;
+            animation: pulseGlow 0.8s infinite alternate;
+        }
+        
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 20px red; opacity: 0.9; }
+            to { text-shadow: 0 0 50px #ff6600; opacity: 1; }
+        }
+        
+        @media (max-width: 800px) {
+            #health-container { width: 200px; top: 10px; right: 10px; }
+            .weapon-btn { padding: 5px 10px; font-size: 9px; }
+            .instruction { font-size: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-title">💥 SOLAR SMASH - PLANET CRACKING 💥</div>
+    <div id="health-container">
+        <div id="health-label"><span>🌍 PLANET INTEGRITY</span><span id="health-percent">100%</span></div>
+        <div id="health-bar-bg"><div id="health-bar-fill"></div></div>
+    </div>
+    <div id="score-box"><div id="score-label">🔥 DAMAGE SCORE</div><div id="score-value">0</div></div>
+    <div id="weapon-selector">
+        <button class="weapon-btn active" data-weapon="drill">🔫 DRILL</button>
+        <button class="weapon-btn" data-weapon="missile">🚀 MISSILE</button>
+        <button class="weapon-btn" data-weapon="orbital">⚡ CANNON</button>
+    </div>
+    <div id="weapon-status">🔫 PLASMA DRILL - CLICK & HOLD</div>
+    <div class="instruction">🎮 [1][2][3] SWITCH WEAPONS | CLICK+HOLD = CRACK THE PLANET</div>
+    <button id="restart-button">💥 RESTART EARTH 💥</button>
+    <div id="victory-text">🌋 EARTH SHATTERED! 🌋</div>
 
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+        
+        // --- GAME STATE ---
+        let earthHealth = 100;
+        let score = 0;
+        let gameActive = true;
+        let currentWeapon = 'drill';
+        let isFiring = false;
+        let isMouseDown = false;
+        let lastMouseX = 0, lastMouseY = 0;
+        let damageLoopId = null;
+        
+        const WEAPON_DAMAGE = { drill: 2.2, missile: 3.5, orbital: 5.0 };
+        
+        // THREE.JS COMPONENTS
+        let scene, camera, renderer, controls, effectComposer;
+        let earthMesh, cloudMesh, atmosphereMesh;
+        let earthMaterial, cloudMaterial;
+        
+        // Planet Cracking System
+        let crackLines = [];
+        let lavaFissures = [];
+        let debrisParticles = [];
+        let flyingChunks = [];
+        let continentSplits = [];
+        let crackIntensity = 0;
+        let explosionPhaseActive = false;
+        
+        // DOM elements
+        const healthFill = document.getElementById('health-bar-fill');
+        const healthPercent = document.getElementById('health-percent');
+        const scoreElement = document.getElementById('score-value');
+        const weaponStatus = document.getElementById('weapon-status');
+        const restartBtn = document.getElementById('restart-button');
+        const victoryText = document.getElementById('victory-text');
+        
+        function updateUI() {
+            healthFill.style.width = earthHealth + '%';
+            healthPercent.innerText = Math.floor(earthHealth) + '%';
+            scoreElement.innerText = Math.floor(score);
+            if (earthHealth <= 0 && gameActive && !explosionPhaseActive) {
+                gameActive = false;
+                finalExplosionPhase();
+            }
+            updateCrackSystem();
+        }
+        
+        function addScore(amount) { score += amount; scoreElement.innerText = Math.floor(score); }
+        
+        function showDamageNumber(amount, x, y, isCrit) {
+            const div = document.createElement('div');
+            div.className = 'damage-number';
+            div.innerText = isCrit ? `💥 ${Math.floor(amount)}%` : `-${Math.floor(amount)}%`;
+            div.style.left = x + 'px';
+            div.style.top = y + 'px';
+            div.style.color = isCrit ? '#ffaa44' : '#ff6644';
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 800);
+        }
+        
+        function createScreenExplosion(x, y) {
+            const exp = document.createElement('div');
+            exp.className = 'explosion-effect';
+            exp.style.left = x + 'px';
+            exp.style.top = y + 'px';
+            document.body.appendChild(exp);
+            setTimeout(() => exp.remove(), 500);
+        }
+        
+        // --- ADVANCED PLANET CRACKING SYSTEM ---
+        function updateCrackSystem() {
+            const damageRatio = 1 - (earthHealth / 100);
+            crackIntensity = Math.min(1, damageRatio * 1.3);
+            
+            // Update crack line intensities
+            crackLines.forEach(line => {
+                if (line.material) {
+                    line.material.opacity = Math.min(0.95, crackIntensity * 1.6);
+                    line.material.color.setHex(0xff8844);
+                }
+            });
+            
+            // Update lava fissure intensities
+            lavaFissures.forEach(fissure => {
+                if (fissure.material) {
+                    fissure.material.emissiveIntensity = crackIntensity * 1.8;
+                    fissure.scale.setScalar(1 + crackIntensity * 0.5);
+                }
+            });
+            
+            // Update continent split visual effects
+            continentSplits.forEach(split => {
+                if (split.material) {
+                    split.material.opacity = Math.min(0.8, crackIntensity * 1.2);
+                }
+                if (split.userData) {
+                    const offset = Math.sin(Date.now() * 0.003) * 0.008 * crackIntensity;
+                    split.position.y = offset;
+                }
+            });
+            
+            // Spawn debris particles as damage increases
+            if (damageRatio > 0.15 && Math.random() < 0.08 * damageRatio) {
+                spawnDebrisChunk();
+            }
+            
+            // Spawn flying chunks at higher damage
+            if (damageRatio > 0.4 && Math.random() < 0.04 * damageRatio) {
+                spawnFlyingChunk();
+            }
+        }
+        
+        function spawnDebrisChunk() {
+            const particleGeo = new THREE.DodecahedronGeometry(0.012 + Math.random() * 0.015);
+            const particleMat = new THREE.MeshStandardMaterial({ color: 0xaa6644, emissive: 0x442200, roughness: 0.6 });
+            const particle = new THREE.Mesh(particleGeo, particleMat);
+            
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const x = Math.sin(phi) * Math.cos(theta);
+            const y = Math.sin(phi) * Math.sin(theta);
+            const z = Math.cos(phi);
+            const pos = new THREE.Vector3(x, y, z).normalize().multiplyScalar(1.02);
+            particle.position.copy(pos);
+            scene.add(particle);
+            
+            const velocity = new THREE.Vector3(x, y, z).normalize().multiplyScalar(0.04 + Math.random() * 0.06);
+            debrisParticles.push({ mesh: particle, velocity: velocity, life: 1.0, rotSpeed: new THREE.Vector3(Math.random()*0.1, Math.random()*0.1, Math.random()*0.1) });
+        }
+        
+        function spawnFlyingChunk() {
+            const chunkGeo = new THREE.DodecahedronGeometry(0.03 + Math.random() * 0.025);
+            const chunkMat = new THREE.MeshStandardMaterial({ color: 0x885533, emissive: 0x331100, roughness: 0.5 });
+            const chunk = new THREE.Mesh(chunkGeo, chunkMat);
+            
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const x = Math.sin(phi) * Math.cos(theta);
+            const y = Math.sin(phi) * Math.sin(theta);
+            const z = Math.cos(phi);
+            chunk.position.copy(new THREE.Vector3(x, y, z).normalize().multiplyScalar(1.03));
+            scene.add(chunk);
+            
+            const velocity = new THREE.Vector3(x, y, z).normalize().multiplyScalar(0.1 + Math.random() * 0.12);
+            flyingChunks.push({ mesh: chunk, velocity: velocity, life: 1.5, rotSpeed: new THREE.Vector3(Math.random()*0.12, Math.random()*0.12, Math.random()*0.12) });
+        }
+        
+        function updateDebrisAndChunks() {
+            for (let i = debrisParticles.length-1; i >= 0; i--) {
+                const p = debrisParticles[i];
+                p.mesh.position.add(p.velocity);
+                p.mesh.rotateX(p.rotSpeed.x);
+                p.mesh.rotateY(p.rotSpeed.y);
+                p.mesh.rotateZ(p.rotSpeed.z);
+                p.life -= 0.02;
+                if (p.life <= 0 || p.mesh.position.length() > 3.5) {
+                    scene.remove(p.mesh);
+                    debrisParticles.splice(i,1);
+                }
+            }
+            for (let i = flyingChunks.length-1; i >= 0; i--) {
+                const f = flyingChunks[i];
+                f.mesh.position.add(f.velocity);
+                f.mesh.rotateX(f.rotSpeed.x);
+                f.mesh.rotateY(f.rotSpeed.y);
+                f.mesh.rotateZ(f.rotSpeed.z);
+                f.life -= 0.015;
+                if (f.life <= 0 || f.mesh.position.length() > 5) {
+                    scene.remove(f.mesh);
+                    flyingChunks.splice(i,1);
+                }
+            }
+        }
+        
+        function createGlowingCrackLines() {
+            // Create multiple crack networks across the sphere
+            const crackNetworks = [
+                // Major crack network 1 (Pacific region)
+                [[0.2, 0.7, 0.65], [0.5, 0.5, 0.68], [0.75, 0.2, 0.62], [0.85, -0.1, 0.5], [0.7, -0.4, 0.55]],
+                [[-0.1, 0.8, 0.6], [-0.4, 0.65, 0.65], [-0.7, 0.4, 0.6], [-0.85, 0.05, 0.5], [-0.8, -0.3, 0.52]],
+                [[0.3, -0.2, 0.93], [0.1, -0.5, 0.86], [-0.2, -0.75, 0.63], [-0.5, -0.7, 0.5], [-0.65, -0.5, 0.56]],
+                [[0.6, -0.5, 0.62], [0.8, -0.55, 0.25], [0.85, -0.4, -0.15], [0.7, -0.2, -0.45]],
+                [[-0.5, 0.5, 0.7], [-0.75, 0.2, 0.62], [-0.82, -0.15, 0.5], [-0.7, -0.5, 0.35], [-0.5, -0.7, 0.2]],
+                [[0.4, 0.85, 0.3], [0.6, 0.7, 0.1], [0.7, 0.4, -0.1], [0.65, 0.05, -0.3], [0.45, -0.2, -0.45]],
+                [[-0.3, 0.88, 0.35], [-0.55, 0.72, 0.1], [-0.65, 0.45, -0.15], [-0.55, 0.1, -0.35], [-0.35, -0.15, -0.5]],
+                [[0.05, -0.92, 0.38], [-0.25, -0.88, 0.32], [-0.55, -0.75, 0.2], [-0.8, -0.55, 0.05], [-0.85, -0.3, -0.1]]
+            ];
+            
+            crackNetworks.forEach(points => {
+                const linePoints = points.map(p => new THREE.Vector3(p[0], p[1], p[2]).normalize().multiplyScalar(1.012));
+                const geometry = new THREE.BufferGeometry().setFromPoints(linePoints);
+                const material = new THREE.LineBasicMaterial({ color: 0xff6622, linewidth: 2, transparent: true, opacity: 0 });
+                const line = new THREE.Line(geometry, material);
+                scene.add(line);
+                crackLines.push(line);
+            });
+        }
+        
+        function createLavaFissures() {
+            // Glowing lava points along cracks
+            for (let i = 0; i < 120; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                const x = Math.sin(phi) * Math.cos(theta);
+                const y = Math.sin(phi) * Math.sin(theta);
+                const z = Math.cos(phi);
+                const pos = new THREE.Vector3(x, y, z).normalize().multiplyScalar(1.018);
+                
+                const glowGeo = new THREE.SphereGeometry(0.014, 8, 8);
+                const glowMat = new THREE.MeshStandardMaterial({ color: 0xff5500, emissive: 0xff3300, emissiveIntensity: 0 });
+                const glowPoint = new THREE.Mesh(glowGeo, glowMat);
+                glowPoint.position.copy(pos);
+                scene.add(glowPoint);
+                lavaFissures.push(glowPoint);
+            }
+        }
+        
+        function createContinentSplits() {
+            // Simulate continents splitting with emissive edges
+            const splitPositions = [
+                { pos: [0.4, 0.3, 0.85], scale: 0.12 },
+                { pos: [-0.35, 0.45, 0.82], scale: 0.1 },
+                { pos: [0.7, -0.2, 0.68], scale: 0.09 },
+                { pos: [-0.6, -0.35, 0.72], scale: 0.11 },
+                { pos: [0.2, -0.7, 0.68], scale: 0.1 },
+                { pos: [-0.45, -0.65, 0.6], scale: 0.08 }
+            ];
+            
+            splitPositions.forEach(split => {
+                const geo = new THREE.BoxGeometry(split.scale, split.scale * 0.3, split.scale);
+                const mat = new THREE.MeshStandardMaterial({ color: 0xff7733, emissive: 0xff3311, emissiveIntensity: 0, transparent: true, opacity: 0 });
+                const plane = new THREE.Mesh(geo, mat);
+                const posVec = new THREE.Vector3(split.pos[0], split.pos[1], split.pos[2]).normalize().multiplyScalar(1.015);
+                plane.position.copy(posVec);
+                plane.lookAt(posVec.clone().multiplyScalar(2));
+                scene.add(plane);
+                continentSplits.push(plane);
+            });
+        }
+        
+        function finalExplosionPhase() {
+            explosionPhaseActive = true;
+            victoryText.style.display = 'block';
+            restartBtn.style.display = 'block';
+            weaponStatus.innerHTML = "💀 PLANET SHATTERED! 💀";
+            if (laserGroup) laserGroup.visible = false;
+            isFiring = false;
+            if (damageLoopId) cancelAnimationFrame(damageLoopId);
+            
+            // Massive destruction: spawn hundreds of chunks
+            for (let i = 0; i < 150; i++) {
+                setTimeout(() => {
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos(2 * Math.random() - 1);
+                    const x = Math.sin(phi) * Math.cos(theta);
+                    const y = Math.sin(phi) * Math.sin(theta);
+                    const z = Math.cos(phi);
+                    
+                    const size = 0.025 + Math.random() * 0.04;
+                    const fragGeo = new THREE.DodecahedronGeometry(size);
+                    const fragMat = new THREE.MeshStandardMaterial({ color: 0x884422, emissive: 0x552200 });
+                    const frag = new THREE.Mesh(fragGeo, fragMat);
+                    frag.position.copy(new THREE.Vector3(x, y, z).normalize().multiplyScalar(1.02));
+                    scene.add(frag);
+                    
+                    const vel = new THREE.Vector3(x, y, z).normalize().multiplyScalar(0.2 + Math.random() * 0.25);
+                    flyingChunks.push({ mesh: frag, velocity: vel, life: 2.5, rotSpeed: new THREE.Vector3(Math.random()*0.2, Math.random()*0.2, Math.random()*0.2) });
+                    
+                    createScreenExplosion(window.innerWidth/2 + (Math.random()-0.5)*400, window.innerHeight/2 + (Math.random()-0.5)*400);
+                }, i * 20);
+            }
+            
+            // Hide original earth elements
+            earthMesh.visible = false;
+            cloudMesh.visible = false;
+            atmosphereMesh.visible = false;
+            crackLines.forEach(l => l.visible = false);
+            lavaFissures.forEach(f => f.visible = false);
+            continentSplits.forEach(s => s.visible = false);
+            
+            // Final intense glow
+            if (earthMaterial) {
+                earthMaterial.emissiveIntensity = 1.5;
+            }
+            
+            // Add a massive shockwave ring
+            const ringGeo = new THREE.RingGeometry(1.2, 2.5, 32);
+            const ringMat = new THREE.MeshBasicMaterial({ color: 0xff4400, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+            const shockwave = new THREE.Mesh(ringGeo, ringMat);
+            shockwave.position.set(0, 0, 0);
+            scene.add(shockwave);
+            
+            let ringScale = 1;
+            const animateShockwave = () => {
+                ringScale += 0.05;
+                shockwave.scale.set(ringScale, ringScale, 1);
+                ringMat.opacity -= 0.02;
+                if (ringMat.opacity > 0) requestAnimationFrame(animateShockwave);
+                else scene.remove(shockwave);
+            };
+            requestAnimationFrame(animateShockwave);
+        }
+        
+        function restartGame() {
+            earthHealth = 100;
+            score = 0;
+            gameActive = true;
+            explosionPhaseActive = false;
+            victoryText.style.display = 'none';
+            restartBtn.style.display = 'none';
+            updateUI();
+            
+            // Reset visibility
+            earthMesh.visible = true;
+            cloudMesh.visible = true;
+            atmosphereMesh.visible = true;
+            crackLines.forEach(l => { l.visible = true; if(l.material) l.material.opacity = 0; });
+            lavaFissures.forEach(f => { f.visible = true; if(f.material) f.material.emissiveIntensity = 0; });
+            continentSplits.forEach(s => { s.visible = true; if(s.material) s.material.opacity = 0; });
+            
+            // Clear debris
+            debrisParticles.forEach(p => scene.remove(p.mesh));
+            flyingChunks.forEach(f => scene.remove(f.mesh));
+            debrisParticles = [];
+            flyingChunks = [];
+            
+            earthMaterial.emissiveIntensity = 0.05;
+            earthMaterial.emissive.setHex(0x221100);
+            if (cloudMaterial) cloudMaterial.opacity = 0.22;
+            
+            if (laserGroup) laserGroup.visible = false;
+            isFiring = false;
+            isMouseDown = false;
+            weaponStatus.innerHTML = `🔫 ${currentWeapon.toUpperCase()} - CLICK & HOLD`;
+            
+            controls.target.set(0, 0, 0);
+            camera.position.set(0, 0.2, 4.5);
+            controls.update();
+        }
+        
+        // --- THREE.JS SETUP ---
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x010118);
+        scene.fog = new THREE.FogExp2(0x010118, 0.00001);
+        camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0.2, 4.5);
+        renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+        
+        const renderScene = new RenderPass(scene, camera);
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.1, 0.6, 0.85);
+        bloomPass.threshold = 0.03;
+        bloomPass.strength = 1.0;
+        effectComposer = new EffectComposer(renderer);
+        effectComposer.addPass(renderScene);
+        effectComposer.addPass(bloomPass);
+        
+        controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.rotateSpeed = 0.8;
+        controls.zoomSpeed = 1.2;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.2;
+        controls.target.set(0, 0, 0);
+        
+        // Textures
+        const textureLoader = new THREE.TextureLoader();
+        const earthMap = textureLoader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
+        const earthSpecularMap = textureLoader.load('https://threejs.org/examples/textures/planets/earth_specular_2048.jpg');
+        const earthNormalMap = textureLoader.load('https://threejs.org/examples/textures/planets/earth_normal_2048.jpg');
+        const cloudMapTex = textureLoader.load('https://threejs.org/examples/textures/planets/earth_clouds_1024.png');
+        
+        const earthGeometry = new THREE.SphereGeometry(1.0, 512, 512);
+        earthMaterial = new THREE.MeshPhongMaterial({
+            map: earthMap,
+            specularMap: earthSpecularMap,
+            specular: new THREE.Color('grey'),
+            shininess: 8,
+            normalMap: earthNormalMap,
+            emissive: new THREE.Color(0x221100),
+            emissiveIntensity: 0.05
+        });
+        earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+        scene.add(earthMesh);
+        
+        const cloudGeometry = new THREE.SphereGeometry(1.008, 512, 512);
+        cloudMaterial = new THREE.MeshPhongMaterial({ map: cloudMapTex, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending });
+        cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
+        scene.add(cloudMesh);
+        
+        const atmosGeo = new THREE.SphereGeometry(1.045, 128, 128);
+        const atmosMat = new THREE.MeshPhongMaterial({ color: 0x88aaff, emissive: 0x2266aa, emissiveIntensity: 0.25, transparent: true, opacity: 0.1, side: THREE.BackSide });
+        atmosphereMesh = new THREE.Mesh(atmosGeo, atmosMat);
+        scene.add(atmosphereMesh);
+        
+        // Stars
+        const starGeo = new THREE.BufferGeometry();
+        const starPos = new Float32Array(10000 * 3);
+        for (let i = 0; i < 10000; i++) {
+            starPos[i*3] = (Math.random() - 0.5) * 2000;
+            starPos[i*3+1] = (Math.random() - 0.5) * 1300;
+            starPos[i*3+2] = (Math.random() - 0.5) * 1000 - 400;
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+        const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.12, transparent: true, blending: THREE.AdditiveBlending }));
+        scene.add(stars);
+        
+        // Lighting
+        const sunLight = new THREE.DirectionalLight(0xffeedd, 1.5);
+        sunLight.position.set(5, 4, 7);
+        scene.add(sunLight);
+        const ambientLight = new THREE.AmbientLight(0x223366, 0.55);
+        scene.add(ambientLight);
+        const rimLight = new THREE.PointLight(0x6688bb, 0.8);
+        rimLight.position.set(-2.5, 1.5, -3.8);
+        scene.add(rimLight);
+        
+        earthMesh.rotation.z = 0.41;
+        cloudMesh.rotation.z = 0.41;
+        atmosphereMesh.rotation.z = 0.41;
+        
+        // Initialize cracking system
+        createGlowingCrackLines();
+        createLavaFissures();
+        createContinentSplits();
+        
+        // --- LASER SYSTEM ---
+        let laserGroup = null, laserCore = null, laserGlow = null, laserParticles = null;
+        let currentLaserHit = null;
+        
+        function createLaser() {
+            if (laserGroup) scene.remove(laserGroup);
+            laserGroup = new THREE.Group();
+            const glowGeo = new THREE.CylinderGeometry(0.45, 0.55, 2.0, 64);
+            const glowMat = new THREE.MeshStandardMaterial({ color: 0xff5500, emissive: 0xff4400, emissiveIntensity: 2.5, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
+            laserGlow = new THREE.Mesh(glowGeo, glowMat);
+            const coreGeo = new THREE.CylinderGeometry(0.18, 0.24, 2.0, 64);
+            const coreMat = new THREE.MeshStandardMaterial({ color: 0xff7744, emissive: 0xff6633, emissiveIntensity: 3.8 });
+            laserCore = new THREE.Mesh(coreGeo, coreMat);
+            const partCount = 400;
+            const partGeo = new THREE.BufferGeometry();
+            const partPos = new Float32Array(partCount * 3);
+            for (let i = 0; i < partCount; i++) partPos[i*3] = (Math.random() - 0.5) * 0.5, partPos[i*3+1] = (Math.random() - 0.5) * 2.2, partPos[i*3+2] = (Math.random() - 0.5) * 0.5;
+            partGeo.setAttribute('position', new THREE.BufferAttribute(partPos, 3));
+            laserParticles = new THREE.Points(partGeo, new THREE.PointsMaterial({ color: 0xff8866, size: 0.04, blending: THREE.AdditiveBlending }));
+            laserGroup.add(laserGlow);
+            laserGroup.add(laserCore);
+            laserGroup.add(laserParticles);
+            scene.add(laserGroup);
+            laserGroup.visible = false;
+        }
+        
+        function getEarthHit(x, y) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            const mouse = new THREE.Vector2();
+            mouse.x = ((x - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((y - rect.top) / rect.height) * 2 + 1;
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+            return raycaster.intersectObject(earthMesh)[0];
+        }
+        
+        function updateLaserPos(hit) {
+            if (!laserGroup || !hit) return;
+            const start = camera.position.clone();
+            const end = hit.point;
+            const dir = new THREE.Vector3().subVectors(end, start).normalize();
+            const dist = start.distanceTo(end);
+            const mid = start.clone().lerp(end, 0.5);
+            laserGroup.position.copy(mid);
+            const quat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+            laserGroup.quaternion.copy(quat);
+            laserGroup.children.forEach(c => c.scale.set(1, dist, 1));
+        }
+        
+        let laserAnim = 0;
+        function animateLaser() {
+            if (!laserGroup || !laserGroup.visible) return;
+            laserAnim += 0.05;
+            if (laserParticles) {
+                const arr = laserParticles.geometry.attributes.position.array;
+                for (let i = 0; i < 400; i++) {
+                    const t = laserAnim * 10 + i;
+                    arr[i*3] = Math.sin(t) * 0.28;
+                    arr[i*3+2] = Math.cos(t * 2.1) * 0.28;
+                    arr[i*3+1] = Math.sin(t * 3.5) * 0.15;
+                }
+                laserParticles.geometry.attributes.position.needsUpdate = true;
+            }
+            const pulse = 2.2 + Math.sin(laserAnim * 24) * 1.0;
+            if (laserGlow) laserGlow.material.emissiveIntensity = pulse;
+            if (laserCore) laserCore.material.emissiveIntensity = 3.2 + Math.sin(laserAnim * 30) * 1.4;
+        }
+        
+        function fireMissileStrike(x, y) {
+            for (let i = 0; i < 6; i++) setTimeout(() => createScreenExplosion(x + (Math.random()-0.5)*70, y + (Math.random()-0.5)*70), i*50);
+        }
+        function fireOrbitalStrike(x, y) {
+            for (let i = 0; i < 10; i++) setTimeout(() => createScreenExplosion(x + (Math.random()-0.5)*120, y + (Math.random()-0.5)*120), i*30);
+        }
+        
+        function startDamageLoop() {
+            if (damageLoopId) cancelAnimationFrame(damageLoopId);
+            let lastTime = performance.now() / 1000;
+            const loop = (nowMs) => {
+                if (!isFiring || !gameActive || earthHealth <= 0) return;
+                const nowSec = nowMs / 1000;
+                let delta = Math.min(0.033, nowSec - lastTime);
+                if (delta > 0) {
+                    const damage = WEAPON_DAMAGE[currentWeapon] * delta;
+                    earthHealth = Math.max(0, earthHealth - damage);
+                    addScore(damage * 100);
+                    updateUI();
+                    const isCrit = Math.random() < 0.15;
+                    showDamageNumber(damage.toFixed(1), lastMouseX + (Math.random()-0.5)*50, lastMouseY + (Math.random()-0.5)*40, isCrit);
+                    
+                    const damageRatio = 1 - (earthHealth / 100);
+                    earthMaterial.emissiveIntensity = 0.05 + damageRatio * 0.8;
+                    cloudMaterial.opacity = 0.22 - damageRatio * 0.14;
+                    
+                    if (currentWeapon === 'missile' && Math.random() < 0.2) fireMissileStrike(lastMouseX, lastMouseY);
+                    if (currentWeapon === 'orbital' && Math.random() < 0.15) fireOrbitalStrike(lastMouseX, lastMouseY);
+                    
+                    lastTime = nowSec;
+                }
+                damageLoopId = requestAnimationFrame(loop);
+            };
+            damageLoopId = requestAnimationFrame(loop);
+        }
+        
+        function startFiring(x, y, hit) {
+            if (!gameActive || earthHealth <= 0) return;
+            if (!hit) hit = getEarthHit(x, y);
+            if (!hit) return;
+            currentLaserHit = hit;
+            isFiring = true;
+            if (currentWeapon === 'drill') {
+                if (!laserGroup) createLaser();
+                updateLaserPos(currentLaserHit);
+                laserGroup.visible = true;
+                weaponStatus.innerHTML = "🔥 DRILLING CRACKS! 🔥";
+            } else if (currentWeapon === 'missile') {
+                fireMissileStrike(x, y);
+                weaponStatus.innerHTML = "🚀 MISSILE STRIKE! 🚀";
+            } else {
+                fireOrbitalStrike(x, y);
+                weaponStatus.innerHTML = "⚡ ORBITAL CANNON! ⚡";
+            }
+            startDamageLoop();
+            controls.autoRotate = false;
+        }
+        
+        function stopFiring() {
+            if (laserGroup) laserGroup.visible = false;
+            if (isFiring) {
+                isFiring = false;
+                if (damageLoopId) cancelAnimationFrame(damageLoopId);
+                weaponStatus.innerHTML = `🔫 ${currentWeapon.toUpperCase()} - CLICK & HOLD`;
+                controls.autoRotate = true;
+            }
+        }
+        
+        // Input
+        const clickCatcher = document.createElement('div');
+        clickCatcher.style.position = 'absolute';
+        clickCatcher.style.top = 0;
+        clickCatcher.style.left = 0;
+        clickCatcher.style.width = '100%';
+        clickCatcher.style.height = '100%';
+        clickCatcher.style.zIndex = 150;
+        clickCatcher.style.pointerEvents = 'auto';
+        clickCatcher.style.cursor = 'crosshair';
+        clickCatcher.style.background = 'transparent';
+        document.body.appendChild(clickCatcher);
+        
+        clickCatcher.addEventListener('mousedown', (e) => {
+            if (!gameActive || earthHealth <= 0) return;
+            isMouseDown = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            const hit = getEarthHit(e.clientX, e.clientY);
+            if (hit) startFiring(e.clientX, e.clientY, hit);
+            e.preventDefault();
+        });
+        
+        window.addEventListener('mousemove', (e) => {
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            if (isMouseDown && isFiring && gameActive && currentWeapon === 'drill') {
+                const hit = getEarthHit(e.clientX, e.clientY);
+                if (hit) { currentLaserHit = hit; updateLaserPos(currentLaserHit); }
+            }
+        });
+        
+        window.addEventListener('mouseup', () => { if (isMouseDown) { stopFiring(); isMouseDown = false; } });
+        
+        document.querySelectorAll('.weapon-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (!gameActive || earthHealth <= 0) return;
+                document.querySelectorAll('.weapon-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentWeapon = btn.dataset.weapon;
+                weaponStatus.innerHTML = `🔫 ${currentWeapon.toUpperCase()} - CLICK & HOLD`;
+                if (currentWeapon !== 'drill' && laserGroup) laserGroup.visible = false;
+            });
+        });
+        
+        restartBtn.addEventListener('click', () => restartGame());
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isFiring) { stopFiring(); isMouseDown = false; }
+            if (e.key === '1') document.querySelector('[data-weapon="drill"]').click();
+            if (e.key === '2') document.querySelector('[data-weapon="missile"]').click();
+            if (e.key === '3') document.querySelector('[data-weapon="orbital"]').click();
+        });
+        
+        // Animation
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.016;
+            
+            if (!isFiring && gameActive) {
+                earthMesh.rotation.y += 0.002;
+                cloudMesh.rotation.y += 0.0024;
+                atmosphereMesh.rotation.y = earthMesh.rotation.y;
+            } else if (isFiring && currentWeapon === 'drill') {
+                earthMesh.rotation.y += 0.0003;
+                cloudMesh.rotation.y += 0.0005;
+            }
+            stars.rotation.y += 0.00003;
+            if (laserGroup && laserGroup.visible) animateLaser();
+            updateDebrisAndChunks();
+            
+            bloomPass.strength = 0.85 + Math.sin(time * 0.7) * 0.1;
+            controls.update();
+            effectComposer.render();
+        }
+        animate();
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            effectComposer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        createLaser();
+        laserGroup.visible = false;
+        
+        // Loading
+        const loadDiv = document.createElement('div');
+        loadDiv.style.position = 'absolute';
+        loadDiv.style.bottom = '50%';
+        loadDiv.style.left = '50%';
+        loadDiv.style.transform = 'translate(-50%, -50%)';
+        loadDiv.style.color = 'white';
+        loadDiv.style.background = 'black';
+        loadDiv.style.padding = '15px 30px';
+        loadDiv.style.borderRadius = '30px';
+        loadDiv.style.zIndex = 999;
+        loadDiv.innerText = 'Loading Planet Cracking System...';
+        document.body.appendChild(loadDiv);
+        let texLoaded = 0;
+        const onTexLoad = () => { texLoaded++; if(texLoaded===4) loadDiv.remove(); };
+        earthMap.addEventListener('load', onTexLoad);
+        earthSpecularMap.addEventListener('load', onTexLoad);
+        earthNormalMap.addEventListener('load', onTexLoad);
+        cloudMapTex.addEventListener('load', onTexLoad);
+        
+        console.log("💥 PLANET CRACKING SYSTEM ACTIVE! Glowing lava cracks, continents splitting, chunks flying into space!");
+    </script>
+</body>
+</html>
